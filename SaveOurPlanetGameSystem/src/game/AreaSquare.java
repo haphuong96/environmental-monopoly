@@ -4,10 +4,10 @@
 package game;
 
 /**
- * @author zholm
+ * @author
  *
  */
-public class Area extends Square {
+public class AreaSquare extends Square {
 
 	private Player owner;
 	private int cost;
@@ -20,11 +20,11 @@ public class Area extends Square {
 	private int entranceFee2Development;
 	private int entranceFee3Development;
 	private int entranceFeeMajorDevelopment;
-	
+
 	/**
 	 * 
 	 */
-	public Area() {
+	public AreaSquare() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -41,7 +41,7 @@ public class Area extends Square {
 	 * @param entranceFee3Development
 	 * @param entranceFeeMajorDevelopment
 	 */
-	public Area(Player owner, int cost, int developments, int developmentCost, boolean majorDevelopment,
+	public AreaSquare(Player owner, int cost, int developments, int developmentCost, boolean majorDevelopment,
 			int majorDevelopmentCost, int entranceFee, int entranceFee1Development, int entranceFee2Development,
 			int entranceFee3Development, int entranceFeeMajorDevelopment) {
 		this.owner = owner;
@@ -57,25 +57,35 @@ public class Area extends Square {
 		this.entranceFeeMajorDevelopment = entranceFeeMajorDevelopment;
 	}
 
-
-
 	@Override
 	public void activateEvent(Player player) {
-		
-		if(owner == null) {
+
+		if (owner == null) {
 			this.buyArea(player);
-		} else if(!player.equals(owner)){
+		} else if (!player.equals(owner)) {
 			this.payOwner(player);
 		}
-		
+
 	}
-	
-	public void buyArea(Player currentPlayer) {
-		
+
+	/**
+	 * Player landing on an available area will have the chance to take charge of a
+	 * particular area in exchange for some resources.
+	 * 
+	 * @param currentPlayer
+	 */
+	public void buyArea(Player currPlayer) {
+
 	}
-	
-	public void payOwner(Player currentPlayer) {
-		
+
+	/**
+	 * Player landing on an area owned by another player must pay the owner an
+	 * amount of resources specified by the area's rule of fee.
+	 * 
+	 * @param currPlayer
+	 */
+	public void payOwner(Player currPlayer) {
+
 	}
 
 }
