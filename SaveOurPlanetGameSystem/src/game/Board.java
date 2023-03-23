@@ -63,8 +63,6 @@ public class Board {
 //		
 //	}
 	
-	
-	
 	/**
 	 *  Method for finding new user position.
 	 */
