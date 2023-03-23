@@ -45,6 +45,11 @@ public class Field {
 		this.areas = areas;
 	}
 	
+	/**
+	 * Check if a player is in charge of this particular field
+	 * @param player
+	 * @return
+	 */
 	public boolean isMonopoly(Player player) {
 		boolean isMonopoly = true;
 		

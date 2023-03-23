@@ -29,8 +29,12 @@ public class DonationSquare extends Square {
 
 	@Override
 	public void activateEvent(Player player) {
+		int oldBalance = player.getBalance();
+		
 		player.increaseBalance(this.donationAmount);
-		System.out.println("You have been donated : "+this.donationAmount);
+		
+		player.displayChangeInBalance(oldBalance, "You have been donated : "+this.donationAmount);
+
 	}
 	
 }

@@ -49,13 +49,22 @@ public class Player {
 	public void setAlive(boolean isAlive) {
 		this.isAlive = isAlive;
 	}
+	
+
+	public int getBalance() {
+		return balance;
+	}
+
+	public void setBalance(int balance) {
+		this.balance = balance;
+	}
 
 	/**
 	 * The player moves on the board to a new position, given the number of moves.
 	 * 
 	 * @param numOfMoves
 	 */
-public void move(int numOfMoves, Board board) {
+	public void move(int numOfMoves, Board board) {
 		
 		int newPostition;
 		
@@ -70,9 +79,11 @@ public void move(int numOfMoves, Board board) {
 		this.setPosition(newPostition);
 		
 	}
+	
 
 	/**
 	 * The player starts a development in a field they own.
+	 * @param board
 	 */
 	public void startDevelopment(Board board) {
 		// get list of monopolies a player owns.
@@ -149,7 +160,7 @@ public void move(int numOfMoves, Board board) {
 
 				if (!areaSelected.isMajorDevelopment()) {
 					if (areaSelected.getNextDevelopmentCost() <= this.balance) {
-						// update development status and player's balance
+						// Player's qualified to do development, so process the development!
 						processAreaDevelopment(areaSelected);
 						// End the loop
 						playerChoice = "e";
@@ -170,7 +181,12 @@ public void move(int numOfMoves, Board board) {
 		}
 
 	}
-
+	
+	
+	/**
+	 * The player to develop an area, once all conditions are met
+	 * @param area
+	 */
 	private void processAreaDevelopment(AreaSquare area) {
 		int oldBalance = this.balance;
 		int cost = area.getNextDevelopmentCost();
@@ -186,7 +202,11 @@ public void move(int numOfMoves, Board board) {
 		// display player's change in balance with reasons.
 		this.displayChangeInBalance(oldBalance, "Cost of development for area " + area.getName());
 	}
-
+	
+	/**
+	 * Display player's monopolies for development consideration
+	 * @param monopolyFields
+	 */
 	private void displayPlayerMonopoly(ArrayList<Field> monopolyFields) {
 		System.out.println("You are in charge of the following fields: ");
 
@@ -203,7 +223,12 @@ public void move(int numOfMoves, Board board) {
 			}
 		}
 	}
-
+	
+	/**
+	 * Display change in player's balance everytime the balance changes
+	 * @param oldBalance
+	 * @param reason
+	 */
 	public void displayChangeInBalance(int oldBalance, String reason) {
 		// if old balance > current balance, it incurred cost and balance decreased.
 		if (oldBalance > this.balance) {
@@ -218,62 +243,12 @@ public void move(int numOfMoves, Board board) {
 
 	}
 
-//		Map<Field, List<AreaSquare>> monopolies = getMonopolyFields(board);
-//		
-//		if (!monopolies.isEmpty()) {
-//			List<List<AreaSquare>> areasOfMonopoly = new ArrayList<>(monopolies.values());
-//			
-//			System.out.println("You own the following fields: ");
-//			for (List<AreaSquare>) {
-//				System.out.println(field.getFieldName());
-//				for (AreaSquare area : monopolies.get(field)) {
-//					System.out.println();
-//					area.displayDevelopmentDetails();
-//				}
-//			}
-//			System.out.println("You can choose to develop an area. Please enter  ");
-//		}
-
-	// system check if the player is qualified:
-	// ++ Player owns a field
-	// ++++ Check player must own all areas belong to the field.
-	// ++++++ loop through the boards to check all areas owned by player
-	// ++++++++++ Map
-	// ++ Player has enough money
-	// ++ area is not fully developed
-//	}
-
-//	public Map<Field, List<AreaSquare>> getMonopolyFields(Board board) {
-//		Map<Field, List<AreaSquare>> areaFieldMonopolyMap = new Hashtable<>();
-//		
-//		Map<Field, List<AreaSquare>> areaFieldMap = board.getAreasByField();
-//		
-//		for (Field field : areaFieldMap.keySet()) {
-//			boolean owned = true;
-//			List<AreaSquare> areasByField = areaFieldMap.get(field);
-//			
-//			for (AreaSquare area : areasByField) {
-//				if (!area.getOwner().equals(this)) {
-//					owned = false;
-//					break;
-//				}
-//			}
-//			
-//			if (owned) {
-//				areaFieldMonopolyMap.put(field, areasByField);
-//			}
-//		}
-//		
-//		return areaFieldMonopolyMap;
-//		
-//	}
-
 	public void increaseBalance(int amount) {
-
+		this.balance += amount;
 	}
 
 	public void decreaseBalance(int amount) {
-
+		this.balance -= amount;
 	}
 
 }

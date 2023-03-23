@@ -37,7 +37,7 @@ public class GameSystem {
 	 * total number of players and individual player's name
 	 */
 	public static void registerPlayers() {
-
+		// TODO: check condition for number of players && enter player's name
 		int numOfPlayers;
 		
 		Scanner scanner = new Scanner(System.in);
@@ -87,6 +87,9 @@ public class GameSystem {
 					player.move(diceResult, board);
 					
 					// activate square event
+					int playerPosition = player.getPosition();
+					Square landingSquare = board.getSquare(playerPosition);
+					landingSquare.activateEvent(player);
 					
 					// player develop
 					player.startDevelopment(board);
