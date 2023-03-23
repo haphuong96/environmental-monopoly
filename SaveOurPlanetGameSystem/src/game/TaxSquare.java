@@ -34,6 +34,7 @@ public class TaxSquare extends Square {
 	@Override
 	public void activateEvent(Player player) {
 		player.decreaseBalance(this.taxAmount);
+		System.out.println("You have been taxed : "+this.taxAmount);
 		
 	}
 	
