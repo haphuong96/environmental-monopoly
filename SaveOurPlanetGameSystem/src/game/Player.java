@@ -11,6 +11,9 @@ import java.util.Scanner;
  *
  */
 public class Player {
+	
+	private static final int PASS_START_BONUS = 200;
+	
 	private String name;
 	private int position;
 	private int balance;
@@ -52,8 +55,20 @@ public class Player {
 	 * 
 	 * @param numOfMoves
 	 */
-	public void move(int numOfMoves) {
-
+public void move(int numOfMoves, Board board) {
+		
+		int newPostition;
+		
+		newPostition = this.position + numOfMoves;
+		
+		//adds 200 to the balance every time the player passes start
+		while (newPostition >= board.getBoardLength()) {
+			newPostition -= board.getBoardLength();
+			this.balance += PASS_START_BONUS;
+		}
+		
+		this.setPosition(newPostition);
+		
 	}
 
 	/**

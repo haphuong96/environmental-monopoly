@@ -38,9 +38,26 @@ public class GameSystem {
 	 */
 	public static void registerPlayers() {
 
-//		Scanner scanner = new Scanner(System.in);
-//		System.out.println("	Enter num of players");
-//		numOfPlayers = scanner.nextInt();
+		int numOfPlayers;
+		
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("	Enter num of players");
+		numOfPlayers = scanner.nextInt();
+		scanner.nextLine();
+		
+		players = new Player[numOfPlayers];
+		
+		for(Player player : players) {
+			
+			String playerName;
+			
+			System.out.println("Please enter player name");
+			playerName = scanner.nextLine();
+			
+			player.setName(playerName);
+		}
+		
+		scanner.close();
 	}
 
 	/**
@@ -67,7 +84,7 @@ public class GameSystem {
 						diceResult += dice.getFaceValue();
 					}
 					// player move
-					player.move(diceResult);
+					player.move(diceResult, board);
 					
 					// activate square event
 					

@@ -34,6 +34,10 @@ public class Board {
 
 	}
 	
+	public int getBoardLength() {
+		return squares.length;
+	}
+	
 //	/**
 //	 * Return a map of areas categorized by field
 //	 * @return a Hashtable of fields and their respective list of areas
