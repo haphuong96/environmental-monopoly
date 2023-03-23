@@ -10,8 +10,9 @@ package game;
 public class AreaSquare extends Square {
 
 	private Player owner;
+	private Field field;
 	private int cost;
-	private int developments;
+	private int numOfDevelopments;
 	private int developmentCost;
 	private boolean majorDevelopment;
 	private int majorDevelopmentCost;
@@ -46,15 +47,84 @@ public class AreaSquare extends Square {
 			int entranceFee3Development, int entranceFeeMajorDevelopment) {
 		this.owner = owner;
 		this.cost = cost;
-		this.developments = developments;
-		this.developmentCost = developmentCost;
-		this.majorDevelopment = majorDevelopment;
-		this.majorDevelopmentCost = majorDevelopmentCost;
+		this.setNumOfDevelopments(developments);
+		this.setDevelopmentCost(developmentCost);
+		this.setMajorDevelopment(majorDevelopment);
+		this.setMajorDevelopmentCost(majorDevelopmentCost);
 		this.entranceFee = entranceFee;
 		this.entranceFee1Development = entranceFee1Development;
 		this.entranceFee2Development = entranceFee2Development;
 		this.entranceFee3Development = entranceFee3Development;
 		this.entranceFeeMajorDevelopment = entranceFeeMajorDevelopment;
+	}
+
+	public Field getField() {
+		return field;
+	}
+
+	public void setField(Field field) {
+		this.field = field;
+	}
+
+	public Player getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Player owner) {
+		this.owner = owner;
+	}
+
+	public int getNumOfDevelopments() {
+		return numOfDevelopments;
+	}
+
+	public void setNumOfDevelopments(int developments) {
+		this.numOfDevelopments = developments;
+	}
+	
+	public void incrementDevelopments() {
+		if (this.numOfDevelopments < 3) {
+			this.numOfDevelopments++;
+		} else if (this.numOfDevelopments == 3) {
+			this.setMajorDevelopment(true);
+		}
+		
+	}
+
+	public int getDevelopmentCost() {
+		return developmentCost;
+	}
+
+	public void setDevelopmentCost(int developmentCost) {
+		this.developmentCost = developmentCost;
+	}
+
+	public boolean isMajorDevelopment() {
+		return majorDevelopment;
+	}
+
+	public void setMajorDevelopment(boolean majorDevelopment) {
+		this.majorDevelopment = majorDevelopment;
+	}
+
+	public int getMajorDevelopmentCost() {
+		return majorDevelopmentCost;
+	}
+
+	public void setMajorDevelopmentCost(int majorDevelopmentCost) {
+		this.majorDevelopmentCost = majorDevelopmentCost;
+	}
+
+	public int getNextDevelopmentCost() {
+		switch (this.numOfDevelopments+1) {
+		case 1:
+		case 2:
+			return this.developmentCost;
+		case 3:
+			return this.majorDevelopmentCost;
+		default:
+			return 0;
+		}
 	}
 
 	@Override
@@ -86,6 +156,15 @@ public class AreaSquare extends Square {
 	 */
 	public void payOwner(Player currPlayer) {
 
+	}
+
+	public void displayDevelopmentDetails() {
+		System.out.println(this.getName());
+		System.out.println("Field: " + this.field.getName());
+		System.out.println("Number of Developments: " + this.getNumOfDevelopments());
+		System.out.println("Development Cost: " + this.getDevelopmentCost());
+		System.out.println("Major Development Activated: " + this.getMajorDevelopmentCost());
+		System.out.println("Major Development Cost: " + this.getMajorDevelopmentCost());
 	}
 
 }

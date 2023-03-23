@@ -3,8 +3,11 @@
  */
 package game;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
 /**
- * @author zholm
+ * @author
  *
  */
 public class Player {
@@ -12,14 +15,30 @@ public class Player {
 	private int position;
 	private int balance;
 	private boolean isAlive;
-	
+
 	/**
 	 * Default constructor
 	 */
 	public Player() {
-		
+
 	}
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
 	public boolean isAlive() {
 		return isAlive;
 	}
@@ -34,28 +53,212 @@ public class Player {
 	 * @param numOfMoves
 	 */
 	public void move(int numOfMoves) {
-		
+
 	}
-	
-	
+
 	/**
 	 * The player starts a development in a field they own.
 	 */
-	public void startDevelopment() {
-		// system check if the player is qualified:
-		// ++ Player owns a field
-		// ++++ Check player must own all areas belong to the field.
-		// ++++++ loop through the boards to check all areas owned by player
-		// ++++++++++ Map 
-		// ++ Player has enough money
-		// ++ area is not fully developed
+	public void startDevelopment(Board board) {
+		// get list of monopolies a player owns.
+		ArrayList<Field> monopolyFields = board.getMonopolyFields(this);
+
+		if (!monopolyFields.isEmpty()) {
+			Scanner scanner = new Scanner(System.in);
+
+			// display player's monopolies
+			displayPlayerMonopoly(monopolyFields);
+
+			// Ask for player decision
+			// Player enter their decision:
+			// + If they enter "E", end the opportunity
+			// + If they enter another entry, check if it's a valid choice for field and
+			// area.
+			// 		If it's an invalid choice, print error message
+			// 		If it's a valid choice, check conditions for player's balance budget and area development status.
+			
+			System.out.println(
+					"You can choose to start a development or reject this opportunity. If you wish to develop an area, you shall select a development within your budget.");
+			String playerChoice;
+			
+			do {
+				System.out.println("Please enter your decision as instructions below.");
+				System.out.println("1. Enter 'E' - I don't want to take this opportunity. End this opportunity!");
+				System.out.println(
+						"2. Enter field id and area id that you want to start a development on, separated by a space. For i.e: field Forest - id 1, area Amazon Forest - id 2, you shall enter '1 2'.");
+
+				// player entry!
+				playerChoice = scanner.nextLine();
+				
+				//if player enter 'E', end the opportunity
+				if (playerChoice.equalsIgnoreCase("e")) {
+					System.out.println("Start development opportunity ends.");
+					break;
+				}
+				
+				// else, analyze player choice
+				String[] choiceSplit = playerChoice.split(" ");
+
+				int fieldChoice, areaChoice; // player choice
+
+				try {
+					fieldChoice = Integer.parseInt(choiceSplit[0]);
+					areaChoice = Integer.parseInt(choiceSplit[1]);
+				} catch (NumberFormatException e) {
+					System.err.println(
+							"Invalid entries. You shall enter a valid number for field id and area id. Please try again.");
+					continue;
+				}
+				
+				// User shall select a field id and area id corresponding to id suggested by system.
+				if (fieldChoice < 1 || fieldChoice > monopolyFields.size()) {
+					System.err.println("Invalid field id. Please try again.");
+					continue;
+				}
+
+				// get the list of areas by user field choice.
+				AreaSquare[] areas = monopolyFields.get(fieldChoice).getAreas();
+
+				if (areaChoice < 1 || areaChoice > areas.length) {
+					System.err.println("Invalid area id. Please try again.");
+					continue;
+				}
+
+				// A valid choice user makes
+				AreaSquare areaSelected = areas[areaChoice];
+
+				// Check user selected area, which must meet the following condition:
+				// + Area development/major development cost is within player's balance
+				// + Area haven't been fully developed yet (major development hasn't been
+				// activated)
+
+				if (!areaSelected.isMajorDevelopment()) {
+					if (areaSelected.getNextDevelopmentCost() <= this.balance) {
+						// update development status and player's balance
+						processAreaDevelopment(areaSelected);
+						// End the loop
+						playerChoice = "e";
+					} else {
+						System.err.println(
+								"You don't have enough resources to develop this area. Please try again with another area.");
+						continue;
+					}
+				} else {
+					System.err.println(
+							"Area has been fully developed, you cannot develop it further. Please try again with another area.");
+					continue;
+				}
+
+			} while (!playerChoice.equalsIgnoreCase("e"));
+
+			scanner.close();
+		}
+
 	}
-	
+
+	private void processAreaDevelopment(AreaSquare area) {
+		int oldBalance = this.balance;
+		int cost = area.getNextDevelopmentCost();
+
+		// update area number of development;
+		area.incrementDevelopments();
+		// update player's balance
+		this.decreaseBalance(cost);
+
+		System.out.println("Successfully complete a development!");
+		area.displayDevelopmentDetails();
+
+		// display player's change in balance with reasons.
+		this.displayChangeInBalance(oldBalance, "Cost of development for area " + area.getName());
+	}
+
+	private void displayPlayerMonopoly(ArrayList<Field> monopolyFields) {
+		System.out.println("You are in charge of the following fields: ");
+
+		for (int fieldId = 1; fieldId <= monopolyFields.size(); fieldId++) {
+			Field field = monopolyFields.get(fieldId);
+			System.out.println("Field id: " + fieldId);
+			System.out.println("Field name: " + field.getName());
+			System.out.println();
+
+			AreaSquare[] areas = field.getAreas();
+			for (int areaId = 1; areaId <= areas.length; areaId++) {
+				System.out.printf("Area id: " + areaId);
+				areas[areaId].displayDevelopmentDetails();
+			}
+		}
+	}
+
+	public void displayChangeInBalance(int oldBalance, String reason) {
+		// if old balance > current balance, it incurred cost and balance decreased.
+		if (oldBalance > this.balance) {
+			System.out.println("Your balance decreases by " + (oldBalance - this.balance));
+			// else balance increased.
+		} else {
+			System.out.println("Your balance increases by " + (this.balance - oldBalance));
+		}
+
+		// display reason
+		System.out.println("Reason: " + reason);
+
+	}
+
+//		Map<Field, List<AreaSquare>> monopolies = getMonopolyFields(board);
+//		
+//		if (!monopolies.isEmpty()) {
+//			List<List<AreaSquare>> areasOfMonopoly = new ArrayList<>(monopolies.values());
+//			
+//			System.out.println("You own the following fields: ");
+//			for (List<AreaSquare>) {
+//				System.out.println(field.getFieldName());
+//				for (AreaSquare area : monopolies.get(field)) {
+//					System.out.println();
+//					area.displayDevelopmentDetails();
+//				}
+//			}
+//			System.out.println("You can choose to develop an area. Please enter  ");
+//		}
+
+	// system check if the player is qualified:
+	// ++ Player owns a field
+	// ++++ Check player must own all areas belong to the field.
+	// ++++++ loop through the boards to check all areas owned by player
+	// ++++++++++ Map
+	// ++ Player has enough money
+	// ++ area is not fully developed
+//	}
+
+//	public Map<Field, List<AreaSquare>> getMonopolyFields(Board board) {
+//		Map<Field, List<AreaSquare>> areaFieldMonopolyMap = new Hashtable<>();
+//		
+//		Map<Field, List<AreaSquare>> areaFieldMap = board.getAreasByField();
+//		
+//		for (Field field : areaFieldMap.keySet()) {
+//			boolean owned = true;
+//			List<AreaSquare> areasByField = areaFieldMap.get(field);
+//			
+//			for (AreaSquare area : areasByField) {
+//				if (!area.getOwner().equals(this)) {
+//					owned = false;
+//					break;
+//				}
+//			}
+//			
+//			if (owned) {
+//				areaFieldMonopolyMap.put(field, areasByField);
+//			}
+//		}
+//		
+//		return areaFieldMonopolyMap;
+//		
+//	}
+
 	public void increaseBalance(int amount) {
-		
+
 	}
-	
+
 	public void decreaseBalance(int amount) {
-		
+
 	}
+
 }

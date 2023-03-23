@@ -12,14 +12,10 @@ import java.util.Scanner;
 public class GameSystem {
 
 	private static Player[] players;
-	
-	public static Player[] deadPlayers;
 
 	private static Board board = new Board();
 
 	private static Dice[] dices;
-	
-	public static int numOfPlayerAlive;
 
 	/**
 	 * @param args
@@ -54,27 +50,32 @@ public class GameSystem {
 	 * in their turn.
 	 */
 	public static void startGame() {
-		numOfPlayerAlive = players.length;
 		
+		int numOfPlayersAlive;
 		
-		while (numOfPlayerAlive > 1) {
-			numOfPlayerAlive --;
+		do {
+			numOfPlayersAlive = 0;
 			for (Player player : players) {
 				if (player.isAlive()) {
-					int diceResult = 0;
+					// count to number of alive members
+					numOfPlayersAlive++;
+		
 					// throw dice
+					int diceResult = 0;
 					for (Dice dice : dices) {
 						dice.roll();
 						diceResult += dice.getFaceValue();
 					}
 					// player move
 					player.move(diceResult);
-
+					
+					// activate square event
+					
 					// player develop
-					player.startDevelopment();
+					player.startDevelopment(board);
 				}
 			}
-		}
+		} while (numOfPlayersAlive > 1);
 
 	}
 
