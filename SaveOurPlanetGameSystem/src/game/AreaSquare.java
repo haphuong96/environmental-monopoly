@@ -190,8 +190,57 @@ public class AreaSquare extends Square {
 	 */
 	public void payOwner(Player currPlayer) {
 
+		int resourceBalance = currPlayer.getBalance();
+		Player areaSquareOwner = this.owner;
+		int totalCost = calcTotalEntranceFeeHelper();
+
+		if (resourceBalance > totalCost) {
+			// decreasing funds from the player
+			currPlayer.decreaseBalance(totalCost);
+
+			// crediting funds to square owner
+			areaSquareOwner.increaseBalance(totalCost);
+
+		} else {
+			// call to sell development or square logic
+			System.out.println("You don't have the resorces to pay this entrance fee!");
+		}
+
 	}
 
+	/**
+	 * Helper method to help calculate total entrance fee
+	 */
+	private int calcTotalEntranceFeeHelper(){
+		
+		int numOfDevelopments = this.getNumOfDevelopments();
+		int totalEntranceFee = this.entranceFee;
+
+		try {
+			switch (numOfDevelopments) {
+			case 1:
+				totalEntranceFee += this.entranceFee1Development;
+				break;
+			case 2:
+				totalEntranceFee += this.entranceFee2Development;
+				break;
+			case 3:
+				totalEntranceFee += this.entranceFee3Development;
+				break;
+			case 4:
+				totalEntranceFee += this.entranceFeeMajorDevelopment;
+				break;
+			default:
+				System.out.println("No Developments.");
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("ERROR: Unable to calculate total entrance fee.");
+		}
+		return totalEntranceFee;
+	}
+	
 	public void displayDevelopmentDetails() {
 		System.out.println(this.getName());
 		System.out.println("Field: " + this.field.getName());
