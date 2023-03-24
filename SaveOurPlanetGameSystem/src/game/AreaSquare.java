@@ -179,7 +179,7 @@ public class AreaSquare extends Square {
 				System.out.println("Invalid input, try again...");
 			}
 		}
-
+		scanner.close();
 	}
 
 	/**
