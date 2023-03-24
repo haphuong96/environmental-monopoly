@@ -3,6 +3,8 @@
  */
 package game;
 
+import java.util.Scanner;
+
 /**
  * @author
  *
@@ -145,6 +147,38 @@ public class AreaSquare extends Square {
 	 * @param currentPlayer
 	 */
 	public void buyArea(Player currPlayer) {
+		
+		Scanner scanner = new Scanner(System.in);
+		int areaCost = this.cost;
+		int resourceBalance = currPlayer.getBalance();
+		int playerOption;
+		boolean validAnswer = false;
+
+		while (validAnswer == false) {
+
+			System.out.println("Do you want to buy this area?\nPress 1 for yes, press 2 for no.");
+			playerOption = scanner.nextInt();
+
+			if (playerOption == 1) {
+				// buy the property
+				if (resourceBalance > areaCost) {
+					currPlayer.decreaseBalance(areaCost);
+					System.out.println("Congratulations, you have bought this area!");
+					validAnswer = true;
+				} else {
+					System.out.println("Not enough resources to buy area!");
+					validAnswer = true;
+				}
+
+			} else if (playerOption == 2) {
+				// don't buy the property
+				System.out.println("Area not purchased.");
+				validAnswer = true;
+
+			} else {
+				System.out.println("Invalid input, try again...");
+			}
+		}
 
 	}
 
