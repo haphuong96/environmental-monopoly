@@ -3,6 +3,8 @@
  */
 package game;
 
+import java.util.Scanner;
+
 /**
  * @author
  *
@@ -145,7 +147,39 @@ public class AreaSquare extends Square {
 	 * @param currentPlayer
 	 */
 	public void buyArea(Player currPlayer) {
+		
+		Scanner scanner = new Scanner(System.in);
+		int areaCost = this.cost;
+		int resourceBalance = currPlayer.getBalance();
+		int playerOption;
+		boolean validAnswer = false;
 
+		while (validAnswer == false) {
+
+			System.out.println("Do you want to buy this area?\nPress 1 for yes, press 2 for no.");
+			playerOption = scanner.nextInt();
+
+			if (playerOption == 1) {
+				// buy the property
+				if (resourceBalance > areaCost) {
+					currPlayer.decreaseBalance(areaCost);
+					System.out.println("Congratulations, you have bought this area!");
+					validAnswer = true;
+				} else {
+					System.out.println("Not enough resources to buy area!");
+					validAnswer = true;
+				}
+
+			} else if (playerOption == 2) {
+				// don't buy the property
+				System.out.println("Area not purchased.");
+				validAnswer = true;
+
+			} else {
+				System.out.println("Invalid input, try again...");
+			}
+		}
+		scanner.close();
 	}
 
 	/**
@@ -156,8 +190,57 @@ public class AreaSquare extends Square {
 	 */
 	public void payOwner(Player currPlayer) {
 
+		int resourceBalance = currPlayer.getBalance();
+		Player areaSquareOwner = this.owner;
+		int totalCost = calcTotalEntranceFeeHelper();
+
+		if (resourceBalance > totalCost) {
+			// decreasing funds from the player
+			currPlayer.decreaseBalance(totalCost);
+
+			// crediting funds to square owner
+			areaSquareOwner.increaseBalance(totalCost);
+
+		} else {
+			// call to sell development or square logic
+			System.out.println("You don't have the resorces to pay this entrance fee!");
+		}
+
 	}
 
+	/**
+	 * Helper method to help calculate total entrance fee
+	 */
+	private int calcTotalEntranceFeeHelper(){
+		
+		int numOfDevelopments = this.getNumOfDevelopments();
+		int totalEntranceFee = this.entranceFee;
+
+		try {
+			switch (numOfDevelopments) {
+			case 1:
+				totalEntranceFee += this.entranceFee1Development;
+				break;
+			case 2:
+				totalEntranceFee += this.entranceFee2Development;
+				break;
+			case 3:
+				totalEntranceFee += this.entranceFee3Development;
+				break;
+			case 4:
+				totalEntranceFee += this.entranceFeeMajorDevelopment;
+				break;
+			default:
+				System.out.println("No Developments.");
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("ERROR: Unable to calculate total entrance fee.");
+		}
+		return totalEntranceFee;
+	}
+	
 	public void displayDevelopmentDetails() {
 		System.out.println(this.getName());
 		System.out.println("Field: " + this.field.getName());
