@@ -61,4 +61,14 @@ public class Field {
 		
 		return isMonopoly;
 	}
+	
+	public int getTotalNumOfDevelopmentsInField() {
+		int total = 0;
+		
+		for (AreaSquare area : areas) {
+			total += area.getNumOfDevelopments();
+		}
+		
+		return total;
+	}
 }

@@ -32,7 +32,7 @@ public class TaxSquare extends Square {
 
 
 	@Override
-	public void activateEvent(Player player) {
+	public void activateEvent(Player player, Board board) {
 		int oldBalance = player.getBalance();
 		
 		player.decreaseBalance(this.taxAmount);

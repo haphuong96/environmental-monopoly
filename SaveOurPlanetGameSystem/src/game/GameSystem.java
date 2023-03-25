@@ -87,9 +87,8 @@ public class GameSystem {
 					player.move(diceResult, board);
 					
 					// activate square event
-					int playerPosition = player.getPosition();
-					Square landingSquare = board.getSquare(playerPosition);
-					landingSquare.activateEvent(player);
+					Square landingSquare = board.getSquare(player.getPosition());
+					landingSquare.activateEvent(player, board);
 					
 					// player develop
 					player.startDevelopment(board);

@@ -28,7 +28,7 @@ public class DonationSquare extends Square {
 
 
 	@Override
-	public void activateEvent(Player player) {
+	public void activateEvent(Player player, Board board) {
 		int oldBalance = player.getBalance();
 		
 		player.increaseBalance(this.donationAmount);

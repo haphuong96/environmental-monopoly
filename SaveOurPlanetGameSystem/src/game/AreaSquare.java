@@ -46,12 +46,12 @@ public class AreaSquare extends Square {
 			int majorDevelopmentCost, int entranceFee, int entranceFee1Development, int entranceFee2Development,
 			int entranceFee3Development, int entranceFeeMajorDevelopment) {
 		this.owner = owner;
-		this.cost = cost;
+		this.setCost(cost);
 		this.setNumOfDevelopments(developments);
 		this.setDevelopmentCost(developmentCost);
 		this.setMajorDevelopment(majorDevelopment);
 		this.setMajorDevelopmentCost(majorDevelopmentCost);
-		this.entranceFee = entranceFee;
+		this.setEntranceFee(entranceFee);
 		this.entranceFee1Development = entranceFee1Development;
 		this.entranceFee2Development = entranceFee2Development;
 		this.entranceFee3Development = entranceFee3Development;
@@ -115,8 +115,25 @@ public class AreaSquare extends Square {
 		this.majorDevelopmentCost = majorDevelopmentCost;
 	}
 
+	public int getCost() {
+		return cost;
+	}
+
+	public void setCost(int cost) {
+		this.cost = cost;
+	}
+
+	public int getEntranceFee() {
+		return entranceFee;
+	}
+
+	public void setEntranceFee(int entranceFee) {
+		this.entranceFee = entranceFee;
+	}
+
 	public int getNextDevelopmentCost() {
-		switch (this.numOfDevelopments+1) {
+		switch (this.numOfDevelopments) {
+		case 0:
 		case 1:
 		case 2:
 			return this.developmentCost;
@@ -128,7 +145,7 @@ public class AreaSquare extends Square {
 	}
 
 	@Override
-	public void activateEvent(Player player) {
+	public void activateEvent(Player player, Board board) {
 
 		if (owner == null) {
 			this.buyArea(player);
@@ -165,6 +182,14 @@ public class AreaSquare extends Square {
 		System.out.println("Development Cost: " + this.getDevelopmentCost());
 		System.out.println("Major Development Activated: " + this.getMajorDevelopmentCost());
 		System.out.println("Major Development Cost: " + this.getMajorDevelopmentCost());
+	}
+	
+	public void displayAreaDetails() {
+		System.out.println(this.getName());
+		System.out.println("Owner: "+ this.owner.getName());
+		System.out.println("Field: "+ this.field.getName());
+		System.out.println("Cost: "+this.getCost());
+		System.out.println("Entrance fee: "+this.getEntranceFee());
 	}
 
 }

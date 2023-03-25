@@ -16,6 +16,7 @@ import java.util.Map;
 public class Board {
 	
 	private Square[] squares;
+	private AreaSquare[] areas;
 	private Field[] fields;
 	
 	/**
@@ -57,6 +58,34 @@ public class Board {
 		}
 		
 		return monopolies;
+	}
+	
+	public List<AreaSquare> getAvailableAreas() {
+		ArrayList<AreaSquare> availableAreas = new ArrayList<>();
+		
+		for (AreaSquare area : this.areas) {
+			if (area.getOwner() == null) {
+				availableAreas.add(area);
+			}
+		}
+		
+		return availableAreas;
+	}
+	
+	public List<AreaSquare> getAreasIncharge(Player player){
+		ArrayList<AreaSquare> areasIncharge = new ArrayList<>();
+		
+		for (AreaSquare area : areas) {
+			areasIncharge.add(area);
+		}
+		
+		return areasIncharge;
+	}
+	
+	public void displayListAreaDetails() {
+		for (AreaSquare area : areas) {
+			area.displayAreaDetails();
+		}
 	}
 	
 }
