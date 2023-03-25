@@ -3,6 +3,7 @@
  */
 package game;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -37,24 +38,46 @@ public class GameSystem {
 	 * total number of players and individual player's name
 	 */
 	public static void registerPlayers() {
-		// TODO: check condition for number of players && enter player's name
+		
 		int numOfPlayers;
+		String name;
 		
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("	Enter num of players");
+		System.out.println("Enter num of players");
 		numOfPlayers = scanner.nextInt();
+		
+		// Ensures that there are always 2-4 players
+		while (numOfPlayers < 2 || numOfPlayers > 4) {
+			System.out.println("Sorry, this game only allows 2-4 players, please enter a new number");
+			numOfPlayers = scanner.nextInt();
+		}
+		
 		scanner.nextLine();
 		
 		players = new Player[numOfPlayers];
+		ArrayList<String> playerNames = new ArrayList<>();
 		
-		for(Player player : players) {
+		for(int loop = 0; loop <numOfPlayers; loop++) {
 			
-			String playerName;
+			Player player = new Player();
 			
 			System.out.println("Please enter player name");
-			playerName = scanner.nextLine();
+			name = scanner.nextLine();
 			
-			player.setName(playerName);
+			//The system does not allow more than one player to have the same name (Case sensitive)
+			if(!playerNames.contains(name)) {
+				playerNames.add(name);
+				
+				player.setName(name);
+				players[loop] = player;
+				
+				System.out.println("Player " + (loop + 1) + " has been named " + name);
+				
+			} else {
+				System.out.println("Sorry, that name has been taken, please enter another name\n");
+				loop--;
+			}
+
 		}
 		
 		scanner.close();
