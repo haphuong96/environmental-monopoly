@@ -3,6 +3,11 @@
  */
 package game;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -31,7 +36,33 @@ public class Board {
 	 * information from input file to build the squares and the board.
 	 */
 	private void build() {
-
+		
+		/*
+		 * String line; File file = new File("Board.csv");
+		 * 
+		 * FileReader fileReader; BufferedReader bufferedReader;
+		 * 
+		 * try {
+		 * 
+		 * fileReader = new FileReader(file); bufferedReader = new
+		 * BufferedReader(fileReader);
+		 * 
+		 * line = bufferedReader.readLine();
+		 * 
+		 * while(line != null) {
+		 * 
+		 * String[] fields; if(line.contains(",")) { fields = line.split(","); } else {
+		 * fields = new String[0]; fields[0] = line; }
+		 * 
+		 * }
+		 * 
+		 * bufferedReader.close(); fileReader.close();
+		 * 
+		 * } catch (FileNotFoundException e) { e.printStackTrace(); } catch (IOException
+		 * e) { e.printStackTrace(); }
+		 */
+		
+		
 	}
 	
 	public int getBoardLength() {
