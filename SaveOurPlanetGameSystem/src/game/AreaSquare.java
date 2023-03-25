@@ -17,12 +17,6 @@ public class AreaSquare extends Square {
 	private int numOfDevelopments;
 	private int developmentCost;
 	private boolean majorDevelopment;
-	private int majorDevelopmentCost;
-	private int entranceFee;
-	private int entranceFee1Development;
-	private int entranceFee2Development;
-	private int entranceFee3Development;
-	private int entranceFeeMajorDevelopment;
 
 	/**
 	 * 

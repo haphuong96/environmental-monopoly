@@ -13,6 +13,8 @@ import java.util.List;
 public class Field {
 	private String name;
 	private AreaSquare[] areas;
+	private int areaCost;
+	private int entranceFee;
 	
 	/**
 	 * Default constructor
@@ -45,6 +47,22 @@ public class Field {
 		this.areas = areas;
 	}
 	
+	public int getAreaCost() {
+		return areaCost;
+	}
+
+	public void setAreaCost(int areaCost) {
+		this.areaCost = areaCost;
+	}
+
+	public int getEntranceFee() {
+		return entranceFee;
+	}
+
+	public void setEntranceFee(int entranceFee) {
+		this.entranceFee = entranceFee;
+	}
+
 	/**
 	 * Check if a player is in charge of this particular field
 	 * @param player
