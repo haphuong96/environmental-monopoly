@@ -146,7 +146,7 @@ public class AreaSquare extends Square {
 		if (owner == null) {
 			this.buyArea(player);
 		} else if (!player.equals(owner)) {
-			this.payOwner(player);
+			this.payOwner(player, board);
 		}
 
 	}
@@ -163,9 +163,8 @@ public class AreaSquare extends Square {
 		int areaCost = this.cost;
 		int resourceBalance = currPlayer.getBalance();
 		int playerOption;
-		boolean validAnswer = false;
-
-		while (validAnswer == false) {
+		
+		do {
 
 			System.out.println("Do you want to buy this area?\nPress 1 for yes, press 2 for no.");
 			playerOption = scanner.nextInt();
@@ -175,21 +174,24 @@ public class AreaSquare extends Square {
 				if (resourceBalance > areaCost) {
 					currPlayer.decreaseBalance(areaCost);
 					System.out.println("Congratulations, you have bought this area!");
-					validAnswer = true;
+
 				} else {
 					System.out.println("Not enough resources to buy area!");
-					validAnswer = true;
+
 				}
 
 			} else if (playerOption == 2) {
 				// don't buy the property
 				System.out.println("Area not purchased.");
-				validAnswer = true;
 
 			} else {
 				System.out.println("Invalid input, try again...");
 			}
-		}
+
+		} while (playerOption != 1 || playerOption != 2);
+
+		System.out.println("Invlaid option. Try again.");
+
 		scanner.close();
 	}
 
@@ -199,7 +201,7 @@ public class AreaSquare extends Square {
 	 * 
 	 * @param currPlayer
 	 */
-	public void payOwner(Player currPlayer) {
+	public void payOwner(Player currPlayer, Board currentBoard) {
 
 		int resourceBalance = currPlayer.getBalance();
 		Player areaSquareOwner = this.owner;
@@ -213,8 +215,11 @@ public class AreaSquare extends Square {
 			areaSquareOwner.increaseBalance(totalCost);
 
 		} else {
-			// call to sell development or square logic
 			System.out.println("You don't have the resorces to pay this entrance fee!");
+			
+			//calling the sell logic from Player class.
+			currPlayer.sell(currentBoard, totalCost);
+			
 		}
 
 	}
