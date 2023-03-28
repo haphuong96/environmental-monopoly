@@ -50,7 +50,6 @@ public class AreaSquare extends Square {
 	public AreaSquare(Player owner, Field field, int numOfDevelopments, boolean majorDevelopment, int cost,
 			int developmentCost, int majorDevelopmentCost, int basicEntranceFee, int[] entraceFeeWithDevelopment,
 			int entranceFeeWithMajorDevelopment) {
-		super();
 		this.owner = owner;
 		this.field = field;
 		this.numOfDevelopments = numOfDevelopments;
