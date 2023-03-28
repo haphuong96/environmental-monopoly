@@ -10,7 +10,16 @@ package game;
 public class DonationSquare extends Square {
 	private int donationAmount;
 	
-	public DonationSquare(int donationAmount) {
+	/**
+	 * 
+	 */
+	public DonationSquare() {
+
+	}
+
+
+	public DonationSquare(String name, int donationAmount) {
+		super(name);
 		this.donationAmount = donationAmount;
 	}
 

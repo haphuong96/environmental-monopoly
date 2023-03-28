@@ -11,6 +11,9 @@ import java.util.Scanner;
  *
  */
 public class GameSystem {
+	
+	private static final int NUN_OF_PLAYERS_MIN = 2;
+	private static final int NUM_OF_PLAYERS_MAX = 4;
 
 	private static Player[] players;
 
@@ -47,7 +50,7 @@ public class GameSystem {
 		numOfPlayers = scanner.nextInt();
 		
 		// Ensures that there are always 2-4 players
-		while (numOfPlayers < 2 || numOfPlayers > 4) {
+		while (numOfPlayers < NUN_OF_PLAYERS_MIN || numOfPlayers > NUM_OF_PLAYERS_MAX) {
 			System.out.println("Sorry, this game only allows 2-4 players, please enter a new number");
 			numOfPlayers = scanner.nextInt();
 		}

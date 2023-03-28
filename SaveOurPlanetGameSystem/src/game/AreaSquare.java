@@ -25,6 +25,29 @@ public class AreaSquare extends Square {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	
+	/**
+	 * @param owner
+	 * @param field
+	 * @param cost
+	 * @param numOfDevelopments
+	 * @param developmentCost
+	 * @param majorDevelopment
+	 */
+	public AreaSquare(Player owner, Field field, int cost, int numOfDevelopments, int developmentCost,
+			boolean majorDevelopment) {
+		super();
+		this.owner = owner;
+		this.field = field;
+		this.cost = cost;
+		this.numOfDevelopments = numOfDevelopments;
+		this.developmentCost = developmentCost;
+		this.majorDevelopment = majorDevelopment;
+	}
+
+
+
 	/**
 	 * @param owner
 	 * @param cost

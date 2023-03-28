@@ -13,7 +13,8 @@ public class TaxSquare extends Square {
 	/**
 	 * 
 	 */
-	public TaxSquare(int taxAmount) {
+	public TaxSquare(String name, int taxAmount) {
+		super(name);
 		this.taxAmount = taxAmount;
 	}
 	
