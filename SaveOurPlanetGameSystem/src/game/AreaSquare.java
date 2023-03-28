@@ -10,13 +10,22 @@ import java.util.Scanner;
  *
  */
 public class AreaSquare extends Square {
+	/**
+	 * This is the required number of developments to start a major development in
+	 * the area.
+	 */
+	private static final int NUM_DEVELOPMENTS_TO_UNLOCK_MAJOR_DEVELOPMENT = 3;
 
 	private Player owner;
 	private Field field;
-	private int cost;
 	private int numOfDevelopments;
-	private int developmentCost;
 	private boolean majorDevelopment;
+	private int cost;
+	private int developmentCost;
+	private int majorDevelopmentCost;
+	private int basicEntranceFee;
+	private int[] entraceFeeWithDevelopment;
+	private int entranceFeeWithMajorDevelopment;
 
 	/**
 	 * 
@@ -24,30 +33,7 @@ public class AreaSquare extends Square {
 	public AreaSquare() {
 		// TODO Auto-generated constructor stub
 	}
-
 	
-	
-	/**
-	 * @param owner
-	 * @param field
-	 * @param cost
-	 * @param numOfDevelopments
-	 * @param developmentCost
-	 * @param majorDevelopment
-	 */
-	public AreaSquare(Player owner, Field field, int cost, int numOfDevelopments, int developmentCost,
-			boolean majorDevelopment) {
-		super();
-		this.owner = owner;
-		this.field = field;
-		this.cost = cost;
-		this.numOfDevelopments = numOfDevelopments;
-		this.developmentCost = developmentCost;
-		this.majorDevelopment = majorDevelopment;
-	}
-
-
-
 	/**
 	 * @param owner
 	 * @param cost
@@ -100,14 +86,22 @@ public class AreaSquare extends Square {
 	public void setNumOfDevelopments(int developments) {
 		this.numOfDevelopments = developments;
 	}
-	
-	public void incrementDevelopments() {
-		if (this.numOfDevelopments < 3) {
+
+	/**
+	 * Update development status when player starts a development. Once a major
+	 * development has been established, the area is considered to be fully
+	 * developed and player cannot make any further developments in the area. A
+	 * major development is also considered a development with future consideration
+	 * to add extra benefits.
+	 */
+	public void incrementDevelopment() {
+		if (!isMajorDevelopment()) {
+			if (this.numOfDevelopments == NUM_DEVELOPMENTS_TO_UNLOCK_MAJOR_DEVELOPMENT) {
+				this.setMajorDevelopment(true);
+			}
+
 			this.numOfDevelopments++;
-		} else if (this.numOfDevelopments == 3) {
-			this.setMajorDevelopment(true);
 		}
-		
 	}
 
 	public int getDevelopmentCost() {
@@ -116,6 +110,22 @@ public class AreaSquare extends Square {
 
 	public void setDevelopmentCost(int developmentCost) {
 		this.developmentCost = developmentCost;
+	}
+
+	/**
+	 * Return the cost to start the next development, which could be a major
+	 * development.
+	 * 
+	 * @return
+	 */
+	public int getNextDevelopmentCost() {
+		if (this.numOfDevelopments < NUM_DEVELOPMENTS_TO_UNLOCK_MAJOR_DEVELOPMENT) {
+			return this.developmentCost;
+		} else if (this.numOfDevelopments == NUM_DEVELOPMENTS_TO_UNLOCK_MAJOR_DEVELOPMENT) {
+			return this.majorDevelopmentCost;
+		} else {
+			return 0;
+		}
 	}
 
 	public boolean isMajorDevelopment() {
@@ -142,81 +152,105 @@ public class AreaSquare extends Square {
 		this.cost = cost;
 	}
 
-	public int getEntranceFee() {
-		return entranceFee;
+	public int getBasicEntranceFee() {
+		return basicEntranceFee;
 	}
 
-	public void setEntranceFee(int entranceFee) {
-		this.entranceFee = entranceFee;
+	public void setBasicEntranceFee(int BasicEntranceFee) {
+		this.basicEntranceFee = BasicEntranceFee;
 	}
 
-	public int getNextDevelopmentCost() {
-		switch (this.numOfDevelopments) {
-		case 0:
-		case 1:
-		case 2:
-			return this.developmentCost;
-		case 3:
-			return this.majorDevelopmentCost;
-		default:
-			return 0;
+	public int[] getEntraceFeeWithDevelopment() {
+		return entraceFeeWithDevelopment;
+	}
+
+	public void setEntraceFeeWithDevelopment(int[] entraceFeeWithDevelopment) {
+		this.entraceFeeWithDevelopment = entraceFeeWithDevelopment;
+	}
+
+	public int getEntranceFeeWithMajorDevelopment() {
+		return entranceFeeWithMajorDevelopment;
+	}
+
+	public void setEntranceFeeWithMajorDevelopment(int entranceFeeWithMajorDevelopment) {
+		this.entranceFeeWithMajorDevelopment = entranceFeeWithMajorDevelopment;
+	}
+
+	public int getAreaSellPrice() {
+		return this.cost / 2;
+	}
+
+	public int getDevelopmentSellPrice() {
+		return this.developmentCost / 2;
+	}
+
+	public int getMajorDevelopmentSellPrice() {
+		return this.majorDevelopmentCost / 2;
+	}
+
+	public void sellDevelopment(Player player, int numToSell) {
+		if (this.isMajorDevelopment()) {
+			this.majorDevelopment = false;
 		}
+		
+		int totalEarning = this.getMajorDevelopmentSellPrice() + this.getDevelopmentSellPrice() * (numToSell - 1);
+		this.numOfDevelopments -= numToSell;
+		
+		player.earnMoney(totalEarning, "Gains From Selling Area Developments");
 	}
 
+	/**
+	 * Activate Area event when a player lands on an Area. If the area is available,
+	 * the player will have the opportunity to buy the area. Else if the area
+	 * already has a owner, the player must pay the owner some of his resources.
+	 */
 	@Override
-	public void activateEvent(Player player, Board board) {
+	public void activate(Player player, Board board) {
 
 		if (owner == null) {
-			this.buyArea(player);
+			this.offerToBuy(player);
 		} else if (!player.equals(owner)) {
-			this.payOwner(player, board);
+			this.payOwner(player);
+		} else {
+			System.out.println("You own the area :D. End move!");
 		}
-
 	}
 
 	/**
 	 * Player landing on an available area will have the chance to take charge of a
 	 * particular area in exchange for some resources.
 	 * 
-	 * @param currentPlayer
+	 * @param area The area to buy
 	 */
-	public void buyArea(Player currPlayer) {
-		
+	public void offerToBuy(Player player) {
+		System.out.println("This area is available for purchase.");
+
 		Scanner scanner = new Scanner(System.in);
-		int areaCost = this.cost;
-		int resourceBalance = currPlayer.getBalance();
-		int playerOption;
-		
-		do {
 
-			System.out.println("Do you want to buy this area?\nPress 1 for yes, press 2 for no.");
-			playerOption = scanner.nextInt();
+		String playerOption;
+		if (player.getBalance() >= this.cost) {
+			do {
+				System.out.println("Do you want to buy this area?\n" + "Press '1' for yes, press '2' for no.");
 
-			if (playerOption == 1) {
-				// buy the property
-				if (resourceBalance > areaCost) {
-					currPlayer.decreaseBalance(areaCost);
-					System.out.println("Congratulations, you have bought this area!");
+				playerOption = scanner.nextLine();
 
+				if (playerOption.equalsIgnoreCase("1")) {
+					player.buyArea(this);
+				} else if (playerOption.equalsIgnoreCase("2")) {
+					System.out.println("Offer to buy area ends.");
 				} else {
-					System.out.println("Not enough resources to buy area!");
-
+					System.out.println("Invalid entry. Please try again and enter an entry as instructions.");
 				}
 
-			} else if (playerOption == 2) {
-				// don't buy the property
-				System.out.println("Area not purchased.");
-
-			} else {
-				System.out.println("Invalid input, try again...");
-			}
-
-		} while (playerOption != 1 || playerOption != 2);
-
-		System.out.println("Invlaid option. Try again.");
+			} while (!playerOption.equalsIgnoreCase("2"));
+		} else {
+			System.out.println("You don't have enough resource to buy this area. Offer to buy area ends.");
+		}
 
 		scanner.close();
 	}
+	
+	
 
 	/**
 	 * Player landing on an area owned by another player must pay the owner an
@@ -224,62 +258,59 @@ public class AreaSquare extends Square {
 	 * 
 	 * @param currPlayer
 	 */
-	public void payOwner(Player currPlayer, Board currentBoard) {
-
-		int resourceBalance = currPlayer.getBalance();
-		Player areaSquareOwner = this.owner;
-		int totalCost = calcTotalEntranceFeeHelper();
-
-		if (resourceBalance > totalCost) {
-			// decreasing funds from the player
-			currPlayer.decreaseBalance(totalCost);
-
-			// crediting funds to square owner
-			areaSquareOwner.increaseBalance(totalCost);
-
-		} else {
-			System.out.println("You don't have the resorces to pay this entrance fee!");
-			
-			//calling the sell logic from Player class.
-			currPlayer.sell(currentBoard, totalCost);
-			
+	public void payOwner(Player player) {
+		System.out.printf("This area is owned by %s. You must pay an entrance fee to the owner for visiting their area.\n", this.owner);
+		
+		int fee = retrieveEntranceFee();
+		
+		if (player.getBalance() < fee) {
+			player.offerToSell(fee);
 		}
+		
+		if (player.isAlive()) {
+			player.payMoney(fee, "Pay Entrance Fee To Owner.");
+			this.owner.earnMoney(fee, "Collect Entrance Fee From Visitor");
+		}
+	
+	}
+	
+	/**
+	 * The owner develops the area.
+	 * 
+	 * @param area
+	 */
+	public void developArea(Player player) {
+
+		int cost = this.getNextDevelopmentCost();
+		
+		// update area number of development;
+		this.incrementDevelopment();
+		// update player's balance
+		player.payMoney(cost, "Cost To Develop An Area.");
+		System.out.println("Successfully complete a development!");
+		this.displayDevelopmentDetails();
 
 	}
 
 	/**
-	 * Helper method to help calculate total entrance fee
+	 * Method to retrieve the entrance fee which is currently applied to the area.
+	 * 
+	 * @return an int for current entrance fee
 	 */
-	private int calcTotalEntranceFeeHelper(){
-		
-		int numOfDevelopments = this.getNumOfDevelopments();
-		int totalEntranceFee = this.entranceFee;
-
-		try {
-			switch (numOfDevelopments) {
-			case 1:
-				totalEntranceFee += this.entranceFee1Development;
-				break;
-			case 2:
-				totalEntranceFee += this.entranceFee2Development;
-				break;
-			case 3:
-				totalEntranceFee += this.entranceFee3Development;
-				break;
-			case 4:
-				totalEntranceFee += this.entranceFeeMajorDevelopment;
-				break;
-			default:
-				System.out.println("No Developments.");
-			}
-
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println("ERROR: Unable to calculate total entrance fee.");
+	private int retrieveEntranceFee() {
+		if (isMajorDevelopment()) {
+			return this.entranceFeeWithMajorDevelopment;
+		} else if (this.numOfDevelopments > 0) {
+			return this.entraceFeeWithDevelopment[numOfDevelopments - 1];
+		} else if (this.field.isMonopoly(owner)) {
+			return this.basicEntranceFee * 2;
+		} else if (this.owner != null){
+			return this.basicEntranceFee;
+		} else {
+			return 0;
 		}
-		return totalEntranceFee;
 	}
-	
+
 	public void displayDevelopmentDetails() {
 		System.out.println(this.getName());
 		System.out.println("Field: " + this.field.getName());
@@ -288,13 +319,13 @@ public class AreaSquare extends Square {
 		System.out.println("Major Development Activated: " + this.getMajorDevelopmentCost());
 		System.out.println("Major Development Cost: " + this.getMajorDevelopmentCost());
 	}
-	
+
 	public void displayAreaDetails() {
 		System.out.println(this.getName());
-		System.out.println("Owner: "+ this.owner.getName());
-		System.out.println("Field: "+ this.field.getName());
-		System.out.println("Cost: "+this.getCost());
-		System.out.println("Entrance fee: "+this.getEntranceFee());
+		System.out.println("Owner: " + this.owner.getName());
+		System.out.println("Field: " + this.field.getName());
+		System.out.println("Cost: " + this.getCost());
+		System.out.println("Entrance fee: " + this.getBasicEntranceFee());
 	}
 
 }

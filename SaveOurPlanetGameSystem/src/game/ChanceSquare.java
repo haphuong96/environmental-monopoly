@@ -10,15 +10,20 @@ import java.util.Random;
  *
  */
 public class ChanceSquare extends Square {
-	private ChanceCard[] chanceCards;
+	
+	public ChanceSquare() {
+		
+	}
 	
 	@Override
-	public void activateEvent(Player player, Board board) {
+	public void activate(Player player, Board board) {
+		IEvent[] chanceDeck = board.getChanceCards();
+		
+		// draw a random card
 		Random random = new Random();
-		
-		int chanceIndex = random.nextInt(chanceCards.length);
-		
-		chanceCards[chanceIndex].activateChance(player, board);
+		int chanceIndex = random.nextInt(chanceDeck.length);
+		IEvent cardDrawn = chanceDeck[chanceIndex];
+		cardDrawn.activate(player, board);
 		
 		System.out.println("Chance ends.");
 	}

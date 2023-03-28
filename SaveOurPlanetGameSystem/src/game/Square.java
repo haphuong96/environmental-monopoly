@@ -7,25 +7,9 @@ package game;
  * @author zholm
  *
  */
-public abstract class Square {
+public abstract class Square implements IEvent {
 
 	private String name;
-	
-	/**
-	 * 
-	 */
-	public Square() {
-
-	}
-
-	/**
-	 * @param name
-	 */
-	public Square(String name) {
-		this.name = name;
-	}
-
-	public abstract void activateEvent(Player player, Board board);
 
 	public String getName() {
 		return name;
@@ -34,5 +18,5 @@ public abstract class Square {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 }

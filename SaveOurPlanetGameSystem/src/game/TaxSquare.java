@@ -14,8 +14,8 @@ public class TaxSquare extends Square {
 	 * 
 	 */
 	public TaxSquare(String name, int taxAmount) {
-		super(name);
 		this.taxAmount = taxAmount;
+		this.setName(name);
 	}
 	
 	
@@ -33,13 +33,8 @@ public class TaxSquare extends Square {
 
 
 	@Override
-	public void activateEvent(Player player, Board board) {
-		int oldBalance = player.getBalance();
-		
-		player.decreaseBalance(this.taxAmount);
-		
-		player.displayChangeInBalance(oldBalance, "You have been taxed : "+this.taxAmount);
-		
+	public void activate(Player player, Board board) {
+		player.payMoney(this.taxAmount, "Pay Tax");
 	}
 	
 	

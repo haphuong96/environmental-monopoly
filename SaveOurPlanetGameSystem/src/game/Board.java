@@ -20,10 +20,9 @@ import java.util.Map;
  */
 public class Board {
 
-	private ArrayList<Square> squares;
+	private Square[] squares;
 	private AreaSquare[] areas;
-	private Field[] fields;
-
+	private IEvent[] chancePool;
 	/**
 	 * Constructor to build the list of squares and fields.
 	 */
@@ -112,35 +111,26 @@ public class Board {
 		  } catch (FileNotFoundException e) { e.printStackTrace(); } catch (IOException
 		  e) { e.printStackTrace(); }
 		  
+		  // build chance decks
+		chancePool = new IEvent[2];
+		chancePool[0] = new BuyAreaChance();
+		chancePool[1] = new MoveRandomChance();
 		  
 		 
 	}
 
 	public int getBoardLength() {
-		return squares.size();
+		return squares.length;
 	}
 
 	public Square getSquare(int index) {
-		return squares.get(index);
+		return squares[index];
 	}
-
-	/**
-	 * Find all fields that the player is in charge of.
-	 * 
-	 * @param player
-	 * @return
-	 */
-	public ArrayList<Field> getMonopolyFields(Player player) {
-		ArrayList<Field> monopolies = new ArrayList<>();
-
-		for (Field field : fields) {
-			if (field.isMonopoly(player)) {
-				monopolies.add(field);
-			}
-		}
-
-		return monopolies;
+	
+	public IEvent[] getChanceCards() {
+		return chancePool;
 	}
+	
 
 	public List<AreaSquare> getAvailableAreas() {
 		ArrayList<AreaSquare> availableAreas = new ArrayList<>();
@@ -153,17 +143,7 @@ public class Board {
 
 		return availableAreas;
 	}
-
-	public List<AreaSquare> getAreasIncharge(Player player) {
-		ArrayList<AreaSquare> areasIncharge = new ArrayList<>();
-
-		for (AreaSquare area : areas) {
-			areasIncharge.add(area);
-		}
-
-		return areasIncharge;
-	}
-
+	
 	public void displayListAreaDetails() {
 		for (AreaSquare area : areas) {
 			area.displayAreaDetails();

@@ -19,8 +19,8 @@ public class DonationSquare extends Square {
 
 
 	public DonationSquare(String name, int donationAmount) {
-		super(name);
 		this.donationAmount = donationAmount;
+		this.setName(name);
 	}
 
 
@@ -37,13 +37,8 @@ public class DonationSquare extends Square {
 
 
 	@Override
-	public void activateEvent(Player player, Board board) {
-		int oldBalance = player.getBalance();
-		
-		player.increaseBalance(this.donationAmount);
-		
-		player.displayChangeInBalance(oldBalance, "You have been donated : "+this.donationAmount);
-
+	public void activate(Player player, Board board) {
+		player.earnMoney(this.donationAmount, "Earn Donation From Government For Environmental Campaigns.");
 	}
 	
 }
