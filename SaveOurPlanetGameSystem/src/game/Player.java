@@ -73,11 +73,17 @@ public class Player {
 		int newPostition = this.position + numOfMoves;
 
 		// Add a bonus every time the player passes [START] square
+		int passStartEarn = 0;
+		
 		while (newPostition >= board.getBoardLength()) {
 			newPostition -= board.getBoardLength();
-			this.balance += PASS_START_BONUS;
+			passStartEarn += PASS_START_BONUS;
 		}
-
+		
+		if (passStartEarn > 0) {
+			this.earnMoney(passStartEarn, "Pass START Square Earning.");
+		}
+		
 		this.setPosition(newPostition);
 
 		// activate square event

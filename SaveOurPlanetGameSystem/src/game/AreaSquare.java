@@ -94,7 +94,7 @@ public class AreaSquare extends Square {
 	 * major development is also considered a development with future consideration
 	 * to add extra benefits.
 	 */
-	public void incrementDevelopment() {
+	public void addDevelopment() {
 		if (!isMajorDevelopment()) {
 			if (this.numOfDevelopments == NUM_DEVELOPMENTS_TO_UNLOCK_MAJOR_DEVELOPMENT) {
 				this.setMajorDevelopment(true);
@@ -284,7 +284,7 @@ public class AreaSquare extends Square {
 		int cost = this.getNextDevelopmentCost();
 		
 		// update area number of development;
-		this.incrementDevelopment();
+		this.addDevelopment();
 		// update player's balance
 		player.payMoney(cost, "Cost To Develop An Area.");
 		System.out.println("Successfully complete a development!");
