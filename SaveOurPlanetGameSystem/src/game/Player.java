@@ -20,7 +20,7 @@ public class Player {
 	private boolean isAlive;
 	private ArrayList<AreaSquare> areasOwned;
 	private ArrayList<Field> monopolies;
-	
+
 	/**
 	 * Default constructor
 	 */
@@ -61,10 +61,9 @@ public class Player {
 		this.balance = balance;
 	}
 
-
 	/**
-	 * The event in which a player moves forward to a new position. After the player moves
-	 * to the new position, activate the event on the player's landing square.
+	 * The event in which a player moves forward to a new position. After the player
+	 * moves to the new position, activate the event on the player's landing square.
 	 * 
 	 * @param numOfMoves
 	 * @param board
@@ -80,7 +79,7 @@ public class Player {
 		}
 
 		this.setPosition(newPostition);
-		
+
 		// activate square event
 		Square landingSquare = board.getSquare(this.position);
 		System.out.printf("You landed on %s!\n" + landingSquare.getName());
@@ -88,8 +87,9 @@ public class Player {
 	}
 
 	/**
-	 * The event in which a player moves backward to a new position. After the player moves
-	 * to the new position, activate the event on the player's landing square.
+	 * The event in which a player moves backward to a new position. After the
+	 * player moves to the new position, activate the event on the player's landing
+	 * square.
 	 * 
 	 * @param numOfMoves
 	 * @param board
@@ -103,40 +103,42 @@ public class Player {
 		}
 
 		this.setPosition(newPosition);
-		
+
 		// activate square event
 		Square landingSquare = board.getSquare(this.position);
 		System.out.printf("You landed on %s!\n" + landingSquare.getName());
 		landingSquare.activate(this, board);
 	}
-	
+
 	/**
 	 * The player buys the area.
+	 * 
 	 * @param player
 	 */
 	public void buyArea(AreaSquare area) {
 		this.payMoney(area.getCost(), "Cost To Buy An Area");
 		area.setOwner(this);
 		this.areasOwned.add(area);
-		
+
 		Field field = area.getField();
 		if (field.isMonopoly(this)) {
 			monopolies.add(field);
 		}
 	}
-	
+
 	/**
 	 * The player sells the area.
+	 * 
 	 * @param area
 	 */
 	public void sellArea(AreaSquare area) {
 		area.setOwner(null);
 		this.areasOwned.remove(area);
 		this.earnMoney(area.getAreaSellPrice(), "Gains From Selling Area");
-		
+
 		monopolies.remove(area.getField());
 	}
-	
+
 	/**
 	 * An event in which the player is offered to start a development in their turn.
 	 * Player can only start a development on an area within the field that they
@@ -150,12 +152,12 @@ public class Player {
 	 * @param board
 	 */
 	public void offerToDevelopArea(Player player) {
-		
+
 		// If player owns any field, display all relevant areas and ask for player's
 		// input
 		if (!monopolies.isEmpty()) {
 			Scanner scanner = new Scanner(System.in);
-			
+
 			// Display all monopoly fields
 			System.out.println("You are in charge of the following fields: ");
 
@@ -263,7 +265,16 @@ public class Player {
 	}
 
 	/**
-	 * Player will be offered to sell their properties once they are facing an obligation fee with not enough money on hand.
+	 * Player will be offered to sell their properties once they are facing an
+	 * obligation fee with not enough money on hand. Player will need to keep
+	 * selling their properties until they have enough balance to pay off the
+	 * obligation fee. The offer will stop when either: - The player is out of the
+	 * game due to running out of resources or choose to give up, OR - The player
+	 * has enough balance to fulfill the obligation.
+	 * 
+	 * Selling rules: When player chooses an area to sell, the player must attempt
+	 * to sell off all developments within the field the area belongs to, before player
+	 * can proceed to sell the area.
 	 * 
 	 * @param board
 	 */
@@ -273,7 +284,7 @@ public class Player {
 
 		boolean isAffordable = false;
 
-		while (!isAffordable) {
+		while (!isAffordable && this.isAlive) {
 			if (!areasOwned.isEmpty()) {
 				Scanner scanner = new Scanner(System.in);
 
@@ -353,43 +364,55 @@ public class Player {
 				// + If yes, end the sell and deduct player's balance for the obligation
 				if (this.getBalance() >= obligationFee) {
 					System.out.println("You have enough resource to pay for obligation. End of sell activity.");
-					// display change in balance
 					isAffordable = true;
 
 				} else {
 					System.out.println(
 							"You don't have enough resource to pay for obligation yet. You need to sell more properties.");
 				}
-			scanner.close();
+				scanner.close();
 			} else {
-				System.out
-						.println("You don't have any resources left to pay for your obligation. You are out of the game...");
+				System.out.println(
+						"You don't have any resources left to pay for your obligation. You are out of the game...");
 				this.setAlive(false);
 				break;
 			}
 		}
-	}	
-	
+	}
+
 	/**
-	 * Player earns money.
-	 * Print message to console informing player's new balance and the reason for the change in balance.
+	 * Player earns money. Print message to console informing player's new balance
+	 * and the reason for the change in balance.
+	 * 
 	 * @param amount
 	 * @param reason
 	 */
 	public void earnMoney(int amount, String reason) {
 		this.balance += amount;
-		System.out.printf("Player %s's balance increases by %d. Reason: %s.\nYour new balance is %d", this.name, reason, this.balance);
+		System.out.printf("Player %s's balance increases by %d. Reason: %s.\nYour new balance is %d", this.name, reason,
+				this.balance);
 	}
-	
+
 	/**
-	 * Player pays money.
-	 * Print message to console informing player's new balance and the reason for the change in balance.
+	 * Player pays money. Print message to console informing player's new balance
+	 * and the reason for the change in balance.
+	 * 
 	 * @param amount
 	 * @param reason
 	 */
 	public void payMoney(int amount, String reason) {
 		this.balance -= amount;
-		System.out.printf("Player %s's balance decreases by %d. Reason: %s.\nYour new balance is %d", this.name, amount, reason, this.balance);
+		System.out.printf("Player %s's balance decreases by %d. Reason: %s.\nYour new balance is %d", this.name, amount,
+				reason, this.balance);
+	}
+	
+	public void showDetails() {
+		System.out.println("Player Name: "+ this.name);
+		System.out.println("Player Balance: "+this.balance);
+		System.out.println("Player Areas Owned: ");
+		for (AreaSquare area : areasOwned) {
+			area.displayAreaDetails();
+		}
 	}
 
 }

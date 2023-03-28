@@ -14,7 +14,7 @@ public class Board {
 
 	private Square[] squares;
 	private AreaSquare[] areas;
-	private iActivate[] chanceCards;
+	private IEvent[] chancePool;
 
 	/**
 	 * Constructor to build the list of squares and fields.
@@ -57,9 +57,9 @@ public class Board {
 		 */
 
 		// build chance decks
-		chanceCards = new iActivate[2];
-		chanceCards[0] = new BuyAreaCard();
-		chanceCards[1] = new MoveRandomCard();
+		chancePool = new IEvent[2];
+		chancePool[0] = new BuyAreaChance();
+		chancePool[1] = new MoveRandomChance();
 
 	}
 
@@ -71,8 +71,8 @@ public class Board {
 		return squares[index];
 	}
 
-	public iActivate[] getChanceCards() {
-		return chanceCards;
+	public IEvent[] getChanceCards() {
+		return chancePool;
 	}
 	
 	public List<AreaSquare> getAvailableAreas() {

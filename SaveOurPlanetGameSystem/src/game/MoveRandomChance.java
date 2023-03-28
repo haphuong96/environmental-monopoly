@@ -9,7 +9,7 @@ import java.util.Random;
  * @author HA PHUONG
  *
  */
-public class MoveRandomCard implements iActivate {
+public class MoveRandomChance implements IEvent {
 	
 	private static final int MIN_RANDOM_MOVES = 1;
 	private static final int MAX_RANDOM_MOVES = 3;

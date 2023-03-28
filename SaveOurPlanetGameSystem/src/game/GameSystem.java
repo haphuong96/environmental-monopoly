@@ -131,7 +131,24 @@ public class GameSystem {
 	 * When the game ends, display the amount of resource each player holds.
 	 */
 	public static void evaluateResult() {
-
+		Player winner = null;
+		
+		// find the winner
+		for (Player player : players) {
+			if (player.isAlive()) {
+				winner = player;
+			}
+		}
+		
+		if (winner != null) {
+			System.out.println("Player " + winner.getName() + "is the winner!");
+		}
+		
+		// display player's resources
+		for (Player player : players) {
+			player.showDetails();
+		}
+		
 	}
 
 }

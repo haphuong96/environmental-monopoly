@@ -7,7 +7,7 @@ package game;
  * @author zholm
  *
  */
-public abstract class Square implements iActivate {
+public abstract class Square implements IEvent {
 
 	private String name;
 

@@ -10,7 +10,7 @@ import java.util.Scanner;
  * @author HA PHUONG
  *
  */
-public class BuyAreaCard implements iActivate {
+public class BuyAreaChance implements IEvent {
 
 	@Override
 	public void activate(Player player, Board board) {
