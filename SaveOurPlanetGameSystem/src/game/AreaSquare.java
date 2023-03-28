@@ -28,39 +28,39 @@ public class AreaSquare extends Square {
 	private int entranceFeeWithMajorDevelopment;
 
 	/**
-	 * 
+	 * Default constructor
 	 */
 	public AreaSquare() {
-		// TODO Auto-generated constructor stub
+
 	}
-	
+
 	/**
+	 * Constructor with arguments
 	 * @param owner
-	 * @param cost
-	 * @param developments
-	 * @param developmentCost
+	 * @param field
+	 * @param numOfDevelopments
 	 * @param majorDevelopment
+	 * @param cost
+	 * @param developmentCost
 	 * @param majorDevelopmentCost
-	 * @param entranceFee
-	 * @param entranceFee1Development
-	 * @param entranceFee2Development
-	 * @param entranceFee3Development
-	 * @param entranceFeeMajorDevelopment
+	 * @param basicEntranceFee
+	 * @param entraceFeeWithDevelopment
+	 * @param entranceFeeWithMajorDevelopment
 	 */
-	public AreaSquare(Player owner, int cost, int developments, int developmentCost, boolean majorDevelopment,
-			int majorDevelopmentCost, int entranceFee, int entranceFee1Development, int entranceFee2Development,
-			int entranceFee3Development, int entranceFeeMajorDevelopment) {
+	public AreaSquare(Player owner, Field field, int numOfDevelopments, boolean majorDevelopment, int cost,
+			int developmentCost, int majorDevelopmentCost, int basicEntranceFee, int[] entraceFeeWithDevelopment,
+			int entranceFeeWithMajorDevelopment) {
+		super();
 		this.owner = owner;
-		this.setCost(cost);
-		this.setNumOfDevelopments(developments);
-		this.setDevelopmentCost(developmentCost);
-		this.setMajorDevelopment(majorDevelopment);
-		this.setMajorDevelopmentCost(majorDevelopmentCost);
-		this.setEntranceFee(entranceFee);
-		this.entranceFee1Development = entranceFee1Development;
-		this.entranceFee2Development = entranceFee2Development;
-		this.entranceFee3Development = entranceFee3Development;
-		this.entranceFeeMajorDevelopment = entranceFeeMajorDevelopment;
+		this.field = field;
+		this.numOfDevelopments = numOfDevelopments;
+		this.majorDevelopment = majorDevelopment;
+		this.cost = cost;
+		this.developmentCost = developmentCost;
+		this.majorDevelopmentCost = majorDevelopmentCost;
+		this.basicEntranceFee = basicEntranceFee;
+		this.entraceFeeWithDevelopment = entraceFeeWithDevelopment;
+		this.entranceFeeWithMajorDevelopment = entranceFeeWithMajorDevelopment;
 	}
 
 	public Field getField() {

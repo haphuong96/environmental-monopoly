@@ -72,4 +72,25 @@ public class Field {
 
 		return total;
 	}
+	
+	public void addArea(AreaSquare newArea) {
+		
+		AreaSquare[] newAreas;
+		
+		if (this.areas == null) {
+			
+			newAreas = new AreaSquare[1];
+			this.setAreas(newAreas);
+			
+		} else {
+			newAreas = new AreaSquare[areas.length + 1];
+			
+			for (int loop = 0; loop < areas.length; loop++) {
+				newAreas[loop] = areas[loop];
+			}
+			
+			newAreas[areas.length] = newArea;
+			this.setAreas(newAreas);
+		}
+	}
 }
