@@ -7,11 +7,9 @@ package game;
  * @author zholm
  *
  */
-public abstract class Square {
+public abstract class Square implements iActivate {
 
 	private String name;
-	
-	public abstract void activateEvent(Player player, Board board);
 
 	public String getName() {
 		return name;
@@ -20,5 +18,5 @@ public abstract class Square {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 }

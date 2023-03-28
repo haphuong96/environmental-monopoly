@@ -10,13 +10,12 @@ import java.util.Scanner;
  * @author HA PHUONG
  *
  */
-public class ChanceCardAreaPurchase extends ChanceCard {
+public class BuyAreaCard implements iActivate {
 
 	@Override
-	public void activateChance(Player player, Board board) {
-		System.out.printf("You draw %s. You will have the opportunity to purchase any available area on the board.\n",
-				this.getName());
-		
+	public void activate(Player player, Board board) {
+		System.out.println("You will now have the opportunity to purchase any available area on the board!");
+
 		// check for available areas
 		List<AreaSquare> availableAreas =  board.getAvailableAreas();
 		
@@ -66,8 +65,7 @@ public class ChanceCardAreaPurchase extends ChanceCard {
 						continue;
 					}
 					
-					areaToPurchase.buyArea(player);
-					
+					player.buyArea(areaToPurchase);
 					
 				} catch (NumberFormatException e) {
 					System.err.println("Invalid entries. Please enter a valid number.");
@@ -75,9 +73,12 @@ public class ChanceCardAreaPurchase extends ChanceCard {
 				}
 				
 			} while (!playerDecision.equalsIgnoreCase("e"));
+			
+			scanner.close();
 		} else {
 			System.out.println("There's no available area.");
 		}
+		
 	}
 
 }
