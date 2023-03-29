@@ -58,7 +58,7 @@ public class GameSystem {
 				numOfPlayers = Integer.parseInt(playerInput);
 
 				if (numOfPlayers < NUM_OF_PLAYERS_MIN || numOfPlayers > NUM_OF_PLAYERS_MAX) {
-					System.out.println("Sorry, this game only allows 2-4 players, please enter a new number");
+					System.err.println("Sorry, this game only allows 2-4 players, please enter a new number");
 					continue;
 				}
 				
@@ -66,7 +66,7 @@ public class GameSystem {
 				
 				
 			} catch (NumberFormatException e) {
-				System.out.println("You should enter a valid number. Please try again.");
+				System.err.println("You should enter a valid number. Please try again.");
 			}
 		}
 		
@@ -91,7 +91,7 @@ public class GameSystem {
 				System.out.println("Player " + (loop + 1) + " has been named " + name);
 
 			} else {
-				System.out.println("Sorry, that name has been taken, please enter another name\n");
+				System.err.println("Sorry, that name has been taken, please enter another name\n.");
 				loop--;
 			}
 
@@ -125,7 +125,9 @@ public class GameSystem {
 					numOfPlayersAlive++;
 					
 					System.out.println();
+					System.out.println("------------------------------------------------------------------------------------------------------------------");
 					System.out.println("It's player " + player.getName() + "'s turn!");
+					System.out.println("Your current balance is "+player.getBalance());
 					System.out.println("Please hit 'ENTER' to throw dices and start your move! If you want to exit the game, type 'Exit'.");
 					String playerInput = scanner.nextLine();
 					

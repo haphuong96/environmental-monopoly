@@ -66,7 +66,7 @@ public class BuyAreaChance implements IEvent {
 					}
 					
 					player.buyArea(areaToPurchase);
-					
+					break;
 				} catch (NumberFormatException e) {
 					System.err.println("Invalid entries. Please enter a valid number.");
 					continue;

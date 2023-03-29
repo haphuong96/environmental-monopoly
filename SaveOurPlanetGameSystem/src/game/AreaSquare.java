@@ -224,7 +224,8 @@ public class AreaSquare extends Square {
 	 * @param area The area to buy
 	 */
 	public void offerToBuy(Player player) {
-		System.out.println("This area is available for purchase.");
+		System.out.println("This area is available for purchase. Please look at the following information to consider your purchase.");
+		this.displayAreaDetails();
 
 		Scanner scanner = new Scanner(System.in);
 
@@ -241,7 +242,7 @@ public class AreaSquare extends Square {
 				} else if (playerOption.equalsIgnoreCase("2")) {
 					System.out.println("Offer to buy area ends.");
 				} else {
-					System.out.println("Invalid entry. Please try again and enter an entry as instructions.");
+					System.err.println("Invalid entry. Please try again and enter an entry as instructions.");
 				}
 
 			} while (!playerOption.equalsIgnoreCase("2"));
@@ -288,7 +289,7 @@ public class AreaSquare extends Square {
 		this.addDevelopment();
 		// update player's balance
 		player.payMoney(cost, "Cost To Develop An Area.");
-		System.out.println("Successfully complete a development!");
+		System.out.println("Successfully complete a development!\n");
 		this.displayDevelopmentDetails();
 
 	}
@@ -317,17 +318,28 @@ public class AreaSquare extends Square {
 		System.out.println("Field: " + this.field.getName());
 		System.out.println("Number of Developments: " + this.getNumOfDevelopments());
 		System.out.println("Development Cost: " + this.getDevelopmentCost());
-		System.out.println("Major Development Activated: " + this.getMajorDevelopmentCost());
+		System.out.println("Major Development Activated: " + this.isMajorDevelopment());
 		System.out.println("Major Development Cost: " + this.getMajorDevelopmentCost());
+		System.out.println("Entrance Fee 1 Development: "+this.entraceFeeWithDevelopment[0]);
+		System.out.println("Entrance Fee 2 Development: "+this.entraceFeeWithDevelopment[1]);
+		System.out.println("Entrance Fee 3 Development: "+this.entraceFeeWithDevelopment[2]);
+		System.out.println("Entrance Fee Major Development: "+this.entranceFeeWithMajorDevelopment);
+		System.out.println();
 	}
 
 	public void displayAreaDetails() {
 		System.out.println(this.getName());
-		String ownerName = (this.owner == null) ? null : this.owner.getName();
-		System.out.println("Owner: " +  ownerName);
+		System.out.printf("Owner: %s\n",  (this.owner == null) ? "N/A" : this.owner.getName());
 		System.out.println("Field: " + this.field.getName());
 		System.out.println("Cost: " + this.getCost());
+		System.out.println("Development Cost: " + this.getDevelopmentCost());
+		System.out.println("Major Development Cost: " + this.getMajorDevelopmentCost());
 		System.out.println("Entrance fee: " + this.getBasicEntranceFee());
+		System.out.println("Entrance Fee 1 Development: "+this.entraceFeeWithDevelopment[0]);
+		System.out.println("Entrance Fee 2 Development: "+this.entraceFeeWithDevelopment[1]);
+		System.out.println("Entrance Fee 3 Development: "+this.entraceFeeWithDevelopment[2]);
+		System.out.println("Entrance Fee Major Development: "+this.entranceFeeWithMajorDevelopment);
+		System.out.println();
 	}
 
 	@Override

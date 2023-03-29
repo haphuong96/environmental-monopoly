@@ -129,7 +129,8 @@ public class Player {
 		this.payMoney(area.getCost(), "Cost To Buy An Area");
 		area.setOwner(this);
 		this.areasOwned.add(area);
-
+		
+		System.out.println("You are now in charge of "+area.getName()+"!");
 		Field field = area.getField();
 		if (field.isMonopoly(this)) {
 			monopolies.add(field);
@@ -173,13 +174,12 @@ public class Player {
 
 			for (int fieldId = 1; fieldId <= monopolies.size(); fieldId++) {
 				Field field = monopolies.get(fieldId - 1);
-				System.out.println("Field id: " + fieldId);
-				System.out.println("Field name: " + field.getName());
-				System.out.println();
+				System.out.printf("Field id: %d - %s\n\n", fieldId, field.getName());
+
 
 				AreaSquare[] areas = field.getAreas();
 				for (int areaId = 1; areaId <= areas.length; areaId++) {
-					System.out.printf("Area id: " + areaId);
+					System.out.printf("Field id: %d || Area id: %s\n", fieldId, areaId);
 					areas[areaId - 1].displayDevelopmentDetails();
 				}
 			}
@@ -214,7 +214,12 @@ public class Player {
 
 				// else, analyze player choice
 				String[] choiceSplit = playerChoice.split(" ");
-
+				
+				if (choiceSplit.length < 2) {
+					System.err.println("Invalid entries. You shall enter 2 entries, a field id and an area id. Please try again.");
+					continue;
+				}
+				
 				int fieldChoice, areaChoice; // player choice
 
 				try {
@@ -242,7 +247,7 @@ public class Player {
 				}
 
 				// A valid choice user makes
-				AreaSquare areaSelected = areas[areaChoice];
+				AreaSquare areaSelected = areas[areaChoice - 1];
 
 				// Check user selected area, which must meet the following condition:
 				// + Area development/major development cost is within player's balance
@@ -268,8 +273,6 @@ public class Player {
 				}
 
 			} while (!playerChoice.equalsIgnoreCase("e"));
-
-			scanner.close();
 		}
 
 	}
@@ -399,7 +402,7 @@ public class Player {
 	 */
 	public void earnMoney(int amount, String reason) {
 		this.balance += amount;
-		System.out.printf("Player %s's balance increases by %d. Reason: %s.\nYour new balance is %d\n", this.name, amount, reason,
+		System.out.printf("Player %s's balance increases by %d. Reason: %s.\nYour new balance is %d.\n", this.name, amount, reason,
 				this.balance);
 	}
 
@@ -412,7 +415,7 @@ public class Player {
 	 */
 	public void payMoney(int amount, String reason) {
 		this.balance -= amount;
-		System.out.printf("Player %s's balance decreases by %d. Reason: %s.\nYour new balance is %d\n", this.name, amount,
+		System.out.printf("Player %s's balance decreases by %d. Reason: %s.\nYour new balance is %d.\n", this.name, amount,
 				reason, this.balance);
 	}
 	
