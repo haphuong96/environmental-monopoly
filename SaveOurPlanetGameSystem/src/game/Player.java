@@ -13,7 +13,8 @@ import java.util.Scanner;
 public class Player {
 
 	private static final int PASS_START_BONUS = 200;
-
+	private static final int START_BALANCE = 1500;
+	
 	private String name;
 	private int position;
 	private int balance;
@@ -27,6 +28,9 @@ public class Player {
 	public Player() {
 		areasOwned = new ArrayList<>();
 		monopolies = new ArrayList<>();
+		isAlive = true;
+		position = 0;
+		balance = START_BALANCE;
 	}
 
 	public String getName() {
@@ -88,7 +92,7 @@ public class Player {
 
 		// activate square event
 		Square landingSquare = board.getSquare(this.position);
-		System.out.printf("You landed on %s!\n" + landingSquare.getName());
+		System.out.printf("You landed on %s!\n", landingSquare.getName());
 		landingSquare.activate(this, board);
 	}
 
@@ -112,7 +116,7 @@ public class Player {
 
 		// activate square event
 		Square landingSquare = board.getSquare(this.position);
-		System.out.printf("You landed on %s!\n" + landingSquare.getName());
+		System.out.printf("You landed on %s!\n", landingSquare.getName());
 		landingSquare.activate(this, board);
 	}
 
@@ -157,7 +161,7 @@ public class Player {
 	 * 
 	 * @param board
 	 */
-	public void offerToDevelopArea(Player player) {
+	public void offerToDevelopArea() {
 
 		// If player owns any field, display all relevant areas and ask for player's
 		// input
@@ -230,7 +234,7 @@ public class Player {
 				}
 
 				// get the list of areas by user field choice.
-				AreaSquare[] areas = monopolies.get(fieldChoice).getAreas();
+				AreaSquare[] areas = monopolies.get(fieldChoice - 1).getAreas();
 
 				if (areaChoice < 1 || areaChoice > areas.length) {
 					System.err.println("Invalid area id. Please try again.");
@@ -247,9 +251,9 @@ public class Player {
 				// TODO: To be delegated to processAreaDevelopment()
 
 				if (!areaSelected.isMajorDevelopment()) {
-					if (areaSelected.getNextDevelopmentCost() <= player.getBalance()) {
+					if (areaSelected.getNextDevelopmentCost() <= this.getBalance()) {
 						// Player's qualified to do development, so process the development!
-						areaSelected.developArea(player);
+						areaSelected.developArea(this);
 						// End the loop
 						break;
 					} else {
@@ -395,7 +399,7 @@ public class Player {
 	 */
 	public void earnMoney(int amount, String reason) {
 		this.balance += amount;
-		System.out.printf("Player %s's balance increases by %d. Reason: %s.\nYour new balance is %d", this.name, reason,
+		System.out.printf("Player %s's balance increases by %d. Reason: %s.\nYour new balance is %d\n", this.name, amount, reason,
 				this.balance);
 	}
 
@@ -408,7 +412,7 @@ public class Player {
 	 */
 	public void payMoney(int amount, String reason) {
 		this.balance -= amount;
-		System.out.printf("Player %s's balance decreases by %d. Reason: %s.\nYour new balance is %d", this.name, amount,
+		System.out.printf("Player %s's balance decreases by %d. Reason: %s.\nYour new balance is %d\n", this.name, amount,
 				reason, this.balance);
 	}
 	

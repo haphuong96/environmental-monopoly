@@ -3,6 +3,7 @@
  */
 package game;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -97,6 +98,7 @@ public class AreaSquare extends Square {
 		if (!isMajorDevelopment()) {
 			if (this.numOfDevelopments == NUM_DEVELOPMENTS_TO_UNLOCK_MAJOR_DEVELOPMENT) {
 				this.setMajorDevelopment(true);
+				System.out.println("You have activated major development for this area!");
 			}
 
 			this.numOfDevelopments++;
@@ -235,6 +237,7 @@ public class AreaSquare extends Square {
 
 				if (playerOption.equalsIgnoreCase("1")) {
 					player.buyArea(this);
+					break;
 				} else if (playerOption.equalsIgnoreCase("2")) {
 					System.out.println("Offer to buy area ends.");
 				} else {
@@ -246,7 +249,6 @@ public class AreaSquare extends Square {
 			System.out.println("You don't have enough resource to buy this area. Offer to buy area ends.");
 		}
 
-		scanner.close();
 	}
 	
 	
@@ -258,7 +260,7 @@ public class AreaSquare extends Square {
 	 * @param currPlayer
 	 */
 	public void payOwner(Player player) {
-		System.out.printf("This area is owned by %s. You must pay an entrance fee to the owner for visiting their area.\n", this.owner);
+		System.out.printf("This area is owned by %s. You must pay an entrance fee to the owner for visiting their area.\n", this.owner.getName());
 		
 		int fee = retrieveEntranceFee();
 		
@@ -321,10 +323,22 @@ public class AreaSquare extends Square {
 
 	public void displayAreaDetails() {
 		System.out.println(this.getName());
-		System.out.println("Owner: " + this.owner.getName());
+		String ownerName = (this.owner == null) ? null : this.owner.getName();
+		System.out.println("Owner: " +  ownerName);
 		System.out.println("Field: " + this.field.getName());
 		System.out.println("Cost: " + this.getCost());
 		System.out.println("Entrance fee: " + this.getBasicEntranceFee());
 	}
+
+	@Override
+	public String toString() {
+		return "AreaSquare [owner=" + owner + ", field=" + field + ", numOfDevelopments=" + numOfDevelopments
+				+ ", majorDevelopment=" + majorDevelopment + ", cost=" + cost + ", developmentCost=" + developmentCost
+				+ ", majorDevelopmentCost=" + majorDevelopmentCost + ", basicEntranceFee=" + basicEntranceFee
+				+ ", entraceFeeWithDevelopment=" + Arrays.toString(entraceFeeWithDevelopment)
+				+ ", entranceFeeWithMajorDevelopment=" + entranceFeeWithMajorDevelopment + "]";
+	}
+	
+	
 
 }

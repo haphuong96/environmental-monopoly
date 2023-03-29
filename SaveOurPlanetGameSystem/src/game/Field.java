@@ -54,7 +54,7 @@ public class Field {
 		boolean isMonopoly = true;
 
 		for (AreaSquare area : areas) {
-			if (!area.getOwner().equals(player)) {
+			if (area.getOwner() == null || !area.getOwner().equals(player) ) {
 				isMonopoly = false;
 				break;
 			}
@@ -73,24 +73,26 @@ public class Field {
 		return total;
 	}
 	
-	public void addArea(AreaSquare newArea) {
-		
-		AreaSquare[] newAreas;
-		
-		if (this.areas == null) {
-			
-			newAreas = new AreaSquare[1];
-			this.setAreas(newAreas);
-			
-		} else {
-			newAreas = new AreaSquare[areas.length + 1];
-			
-			for (int loop = 0; loop < areas.length; loop++) {
-				newAreas[loop] = areas[loop];
-			}
-			
-			newAreas[areas.length] = newArea;
-			this.setAreas(newAreas);
-		}
-	}
+//	public void addArea(AreaSquare newArea) {
+//		// check the areas in the field
+//		// if no area --> set area
+//		// else > 1 area, make a new array of all previous areas
+//		AreaSquare[] newAreas;
+//		
+//		if (this.areas == null) {
+//			
+//			newAreas = new AreaSquare[1];
+//			this.setAreas(newAreas);
+//			
+//		} else {
+//			newAreas = new AreaSquare[areas.length + 1];
+//			
+//			for (int loop = 0; loop < areas.length; loop++) {
+//				newAreas[loop] = areas[loop];
+//			}
+//			
+//			newAreas[areas.length] = newArea;
+//			this.setAreas(newAreas);
+//		}
+//	}
 }

@@ -74,7 +74,6 @@ public class BuyAreaChance implements IEvent {
 				
 			} while (!playerDecision.equalsIgnoreCase("e"));
 			
-			scanner.close();
 		} else {
 			System.out.println("There's no available area.");
 		}
