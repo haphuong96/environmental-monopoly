@@ -34,7 +34,14 @@ public class TaxSquare extends Square {
 
 	@Override
 	public void activate(Player player, Board board) {
-		player.payMoney(this.taxAmount, "Pay Tax");
+		if (player.getBalance() < this.taxAmount) {
+			player.offerToSell(taxAmount);
+		}
+		
+		if (player.isAlive()) {
+			player.payMoney(this.taxAmount, "Pay Tax");
+		}
+		
 	}
 	
 	

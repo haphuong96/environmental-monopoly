@@ -14,7 +14,7 @@ public class Player {
 
 	private static final int PASS_START_BONUS = 200;
 	private static final int START_BALANCE = 1500;
-	
+
 	private String name;
 	private int position;
 	private int balance;
@@ -78,16 +78,16 @@ public class Player {
 
 		// Add a bonus every time the player passes [START] square
 		int passStartEarn = 0;
-		
+
 		while (newPostition >= board.getBoardLength()) {
 			newPostition -= board.getBoardLength();
 			passStartEarn += PASS_START_BONUS;
 		}
-		
+
 		if (passStartEarn > 0) {
 			this.earnMoney(passStartEarn, "Pass START Square Earning.");
 		}
-		
+
 		this.setPosition(newPostition);
 
 		// activate square event
@@ -129,8 +129,8 @@ public class Player {
 		this.payMoney(area.getCost(), "Cost To Buy An Area");
 		area.setOwner(this);
 		this.areasOwned.add(area);
-		
-		System.out.println("You are now in charge of "+area.getName()+"!");
+
+		System.out.println("You are now in charge of " + area.getName() + "!");
 		Field field = area.getField();
 		if (field.isMonopoly(this)) {
 			monopolies.add(field);
@@ -176,7 +176,6 @@ public class Player {
 				Field field = monopolies.get(fieldId - 1);
 				System.out.printf("Field id: %d - %s\n\n", fieldId, field.getName());
 
-
 				AreaSquare[] areas = field.getAreas();
 				for (int areaId = 1; areaId <= areas.length; areaId++) {
 					System.out.printf("Field id: %d || Area id: %s\n", fieldId, areaId);
@@ -214,12 +213,13 @@ public class Player {
 
 				// else, analyze player choice
 				String[] choiceSplit = playerChoice.split(" ");
-				
+
 				if (choiceSplit.length < 2) {
-					System.err.println("Invalid entries. You shall enter 2 entries, a field id and an area id. Please try again.");
+					System.err.println(
+							"Invalid entries. You shall enter 2 entries, a field id and an area id. Please try again.");
 					continue;
 				}
-				
+
 				int fieldChoice, areaChoice; // player choice
 
 				try {
@@ -286,8 +286,8 @@ public class Player {
 	 * has enough balance to fulfill the obligation.
 	 * 
 	 * Selling rules: When player chooses an area to sell, the player must attempt
-	 * to sell off all developments within the field the area belongs to, before player
-	 * can proceed to sell the area.
+	 * to sell off all developments within the field the area belongs to, before
+	 * player can proceed to sell the area.
 	 * 
 	 * @param board
 	 */
@@ -304,19 +304,20 @@ public class Player {
 				// display all areas player is in charge
 				System.out.println("You're currently in charge of the following areas: ");
 				for (int areaId = 1; areaId <= areasOwned.size(); areaId++) {
-					areasOwned.get(areaId - 1).displayAreaDetails();
+					System.out.println("Area id: " + areaId);
+					areasOwned.get(areaId - 1).displayDevelopmentDetails();
 				}
 
 				String playerDecision;
 				do {
 					System.out.println("Please enter your decision as instructions below.");
 					System.out.println(
-							"Enter 'E' - I want to reject this opportunity. If you choose this option, you will be out of the game.");
+							"1. Enter 'E' - I want to reject this opportunity. If you choose this option, you will be out of the game.");
 					System.out.println(
-							"Enter area id and the number of developments you want to sell, separated by a space. "
-									+ "Please make sure that you shall sell all of your developments first before attempting to sell your areas."
-									+ "A major development is also counted to the number of developments you want to sell. For i.e, you can enter '4' to sell all 3 developments and the major development if the area is fully developed."
-									+ "If major development is activated, the major development will be sold out first, then the rest will be counted towards the number of developments."
+							"2. Enter area id and the number of developments you want to sell, separated by a space.\n"
+									+ "Please make sure that you shall sell all of your developments first before attempting to sell your areas.\n"
+									+ "A major development is also counted to the number of developments you want to sell. For i.e, you can enter '4' to sell all 3 developments and the major development if the area is fully developed.\n"
+									+ "If major development is activated, the major development will be sold out first, then the rest will be counted towards the number of developments.\n"
 									+ "If you select an area without any development and have no developments within the field, you will automatically sell the area off without any consideration for the number of developments you enter.");
 
 					playerDecision = scanner.nextLine();
@@ -354,6 +355,7 @@ public class Player {
 						// else, sell the remaining developments
 						if (totalNumOfDevelopmentsByField == 0) {
 							this.sellArea(areaToSell);
+							break;
 						} else {
 							int numOfDevToSell = Integer.parseInt(playerDecisionSplit[1]);
 
@@ -364,13 +366,15 @@ public class Player {
 
 							// sell development
 							areaToSell.sellDevelopment(this, numOfDevToSell);
+							break;
 						}
+
 					} catch (NumberFormatException e) {
 						System.err
 								.println("Invalid area and number of development entries. Please enter valid numbers.");
 					}
 				} while (!playerDecision.equalsIgnoreCase("e"));
-
+				
 				// check if the new balance is enough to pay the obligation
 				// + If no, continue to ask for player's decision to sell properties, if they
 				// have any properties left
@@ -383,7 +387,6 @@ public class Player {
 					System.out.println(
 							"You don't have enough resource to pay for obligation yet. You need to sell more properties.");
 				}
-				scanner.close();
 			} else {
 				System.out.println(
 						"You don't have any resources left to pay for your obligation. You are out of the game...");
@@ -402,8 +405,8 @@ public class Player {
 	 */
 	public void earnMoney(int amount, String reason) {
 		this.balance += amount;
-		System.out.printf("Player %s's balance increases by %d. Reason: %s.\nYour new balance is %d.\n", this.name, amount, reason,
-				this.balance);
+		System.out.printf("Player %s's balance increases by %d. Reason: %s.\nYour new balance is %d.\n", this.name,
+				amount, reason, this.balance);
 	}
 
 	/**
@@ -415,13 +418,13 @@ public class Player {
 	 */
 	public void payMoney(int amount, String reason) {
 		this.balance -= amount;
-		System.out.printf("Player %s's balance decreases by %d. Reason: %s.\nYour new balance is %d.\n", this.name, amount,
-				reason, this.balance);
+		System.out.printf("Player %s's balance decreases by %d. Reason: %s.\nYour new balance is %d.\n", this.name,
+				amount, reason, this.balance);
 	}
-	
+
 	public void showDetails() {
-		System.out.println("Player Name: "+ this.name);
-		System.out.println("Player Balance: "+this.balance);
+		System.out.println("Player Name: " + this.name);
+		System.out.println("Player Balance: " + this.balance);
 		System.out.println("Player Areas Owned: ");
 		for (AreaSquare area : areasOwned) {
 			area.displayAreaDetails();
