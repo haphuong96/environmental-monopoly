@@ -357,10 +357,16 @@ public class Player {
 							this.sellArea(areaToSell);
 							break;
 						} else {
+							System.out.println("There are developments left in the field. Selling developments...");
+							if (playerDecisionSplit.length < 2) {
+								System.err.println("You need to enter a number of developments to sell. Please try again.");
+								continue;
+							}
+							
 							int numOfDevToSell = Integer.parseInt(playerDecisionSplit[1]);
 
 							if (numOfDevToSell < 1 || numOfDevToSell > areaNumOfDevelopments) {
-								System.err.println("Invalid number of development. Please try again.");
+								System.err.println("Invalid number of developments. Please try again.");
 								continue;
 							}
 
