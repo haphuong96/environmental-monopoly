@@ -307,7 +307,17 @@ public class Player {
 					System.out.println("Area id: " + areaId);
 					areasOwned.get(areaId - 1).displayDevelopmentDetails();
 				}
-
+				
+				// print which areas the player is in charge
+				if (!monopolies.isEmpty()) {
+					System.out.println("You are in charge of the following fields: ");
+					for (Field field : monopolies) {
+						System.out.println(field.getName());
+					}
+				}
+				
+				System.out.println();
+				
 				String playerDecision;
 				do {
 					System.out.println("Please enter your decision as instructions below.");
@@ -315,7 +325,7 @@ public class Player {
 							"1. Enter 'E' - I want to reject this opportunity. If you choose this option, you will be out of the game.");
 					System.out.println(
 							"2. Enter area id and the number of developments you want to sell, separated by a space.\n"
-									+ "Please make sure that you shall sell all of your developments first before attempting to sell your areas.\n"
+									+ "If you are in charge of a field, please make sure that you shall sell all of your developments within the field first before attempting to sell your areas.\n"
 									+ "A major development is also counted to the number of developments you want to sell. For i.e, you can enter '4' to sell all 3 developments and the major development if the area is fully developed.\n"
 									+ "If major development is activated, the major development will be sold out first, then the rest will be counted towards the number of developments.\n"
 									+ "If you select an area without any development and have no developments within the field, you will automatically sell the area off without any consideration for the number of developments you enter.");
@@ -353,6 +363,7 @@ public class Player {
 						// if player is not monopoly, or if player is monopoly and has no development in
 						// the field, sell area
 						// else, sell the remaining developments
+						
 						if (totalNumOfDevelopmentsByField == 0) {
 							this.sellArea(areaToSell);
 							break;

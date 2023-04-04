@@ -23,11 +23,14 @@ public class GameSystem {
 
 	private static Dice[] dices = new Dice[NUM_OF_DICES];
 
+	private static boolean gameExit = false;
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
+		System.out.println("Welcome to Save Our Planet! Have fun!");
+		
 		// register number of players and player's name
 		registerPlayers();
 
@@ -61,15 +64,14 @@ public class GameSystem {
 					System.err.println("Sorry, this game only allows 2-4 players, please enter a new number");
 					continue;
 				}
-				
+
 				break;
-				
-				
+
 			} catch (NumberFormatException e) {
 				System.err.println("You should enter a valid number. Please try again.");
 			}
 		}
-		
+
 		players = new Player[numOfPlayers];
 		ArrayList<String> playerNames = new ArrayList<>();
 
@@ -114,36 +116,35 @@ public class GameSystem {
 		Scanner scanner = new Scanner(System.in);
 
 		int numOfPlayersAlive;
-		
-		boolean gameExit = false;
-		
+
 		do {
 			numOfPlayersAlive = 0;
 			for (Player player : players) {
 				if (player.isAlive()) {
 					// count to number of alive members
 					numOfPlayersAlive++;
-					
+
 					System.out.println();
-					System.out.println("------------------------------------------------------------------------------------------------------------------");
+					System.out.println(
+							"------------------------------------------------------------------------------------------------------------------");
 					System.out.println("It's player " + player.getName() + "'s turn!");
-					System.out.println("Your current balance is "+player.getBalance());
-					System.out.println("Please hit 'ENTER' to throw dices and start your move! If you want to exit the game, type 'Exit'.");
+					System.out.println("Your current balance is " + player.getBalance());
+					System.out.println(
+							"Please hit 'ENTER' to throw dices and start your move! If you want to exit the game, type 'Exit'.");
 					String playerInput = scanner.nextLine();
-					
+
 					if (playerInput.equalsIgnoreCase("exit")) {
 						gameExit = true;
 						break;
 					}
-					
+
 					// throw dices
 					int diceResult = 0;
 					for (Dice dice : dices) {
 						dice.roll();
 						diceResult += dice.getFaceValue();
 					}
-					
-					
+
 					System.out.printf("Player %s have rolled a %d and a %d - that totals %d.\n", player.getName(),
 							dices[0].getFaceValue(), dices[1].getFaceValue(), diceResult);
 
@@ -163,22 +164,25 @@ public class GameSystem {
 	 * When the game ends, display the amount of resource each player holds.
 	 */
 	public static void evaluateResult() {
-		Player winner = null;
+		if (!gameExit) {
+			Player winner = null;
 
-		// find the winner
-		for (Player player : players) {
-			if (player.isAlive()) {
-				winner = player;
+			// find the winner
+			for (Player player : players) {
+				if (player.isAlive()) {
+					winner = player;
+				}
 			}
-		}
 
-		if (winner != null) {
-			System.out.println("Player " + winner.getName() + "is the winner!");
+			if (winner != null) {
+				System.out.println("Player " + winner.getName() + " is the winner!\n");
+			}
 		}
 
 		// display player's resources
 		for (Player player : players) {
 			player.showDetails();
+			System.out.println();
 		}
 
 	}
