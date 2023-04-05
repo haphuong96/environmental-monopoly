@@ -144,7 +144,8 @@ public class GameSystem {
 						dice.roll();
 						diceResult += dice.getFaceValue();
 					}
-
+					
+					diceResult = 12;
 					System.out.printf("Player %s have rolled a %d and a %d - that totals %d.\n", player.getName(),
 							dices[0].getFaceValue(), dices[1].getFaceValue(), diceResult);
 
@@ -164,6 +165,7 @@ public class GameSystem {
 	 * When the game ends, display the amount of resource each player holds.
 	 */
 	public static void evaluateResult() {
+		System.out.println("---------------------------Game Evaluation------------------------------");
 		if (!gameExit) {
 			Player winner = null;
 

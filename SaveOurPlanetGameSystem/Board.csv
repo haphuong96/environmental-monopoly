@@ -4,18 +4,18 @@ Area,Jiuquan Wind Power Base,0,150,100,200,15,50,150,450,600,,
 Donation,Receive Government Donation,,,,,,,,,,200,
 Area,Shepherds Flat Wind Farm,0,150,100,200,15,50,150,450,600,,
 Area,Amazon Rainforest,2,220,200,400,30,90,250,700,875,,
-Chance,chance,,,,,,,,,,,
-Tax,Donate to government environmental campaigns,,,,,,,,,,,200
+Chance,Chance,,,,,,,,,,,
+Tax,Pay GreenTax,,,,,,,,,,,200
 Area,Tiaga Biome,2,220,200,400,30,90,250,700,875,,
 Donation,Receive Government Donation,,,,,,,,,,200,
 Area,Yosemite,2,220,200,400,30,90,250,700,875,,
-Blank,Blank,,,,,,,,,,,
+Blank,Picnic Area,,,,,,,,,,,
 Area,Three Gorges Dam,1,180,150,250,20,70,200,550,750,,
-Donation,Receive Government Donation,,,,,,,,,,200,
+Tax,Pay GreenTax,,,,,,,,,,,200
 Area,Grand Coulee Dam,1,180,150,250,20,70,200,550,750,,
 Area,Guri Dam,1,180,150,250,20,70,200,550,750,,
-Chance,chance,,,,,,,,,,,
+Chance,Chance,,,,,,,,,,,
 Donation,Receive Government Donation,,,,,,,,,,200,
 Area,Golmud Solar Park,3,260,250,500,40,110,330,800,975,,
-Tax,Donate to government environmental campaigns,,,,,,,,,,,200
+Tax,Pay GreenTax,,,,,,,,,,,200
 Area,Benban Solar Park,3,260,250,500,40,110,330,800,975,,
