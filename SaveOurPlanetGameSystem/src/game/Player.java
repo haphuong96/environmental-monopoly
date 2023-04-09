@@ -16,7 +16,7 @@ public class Player {
 	private static final int START_BALANCE = 1500;
 
 	private String name;
-	private int position;
+	private Square position;
 	private int balance;
 	private boolean isAlive;
 	private ArrayList<AreaSquare> areasOwned;
@@ -25,11 +25,11 @@ public class Player {
 	/**
 	 * Default constructor
 	 */
-	public Player() {
+	public Player(Square startPosition) {
 		areasOwned = new ArrayList<>();
 		monopolies = new ArrayList<>();
 		isAlive = true;
-		position = 0;
+		position = startPosition;
 		balance = START_BALANCE;
 	}
 
@@ -41,11 +41,11 @@ public class Player {
 		this.name = name;
 	}
 
-	public int getPosition() {
+	public Square getPosition() {
 		return position;
 	}
 
-	public void setPosition(int position) {
+	public void setPosition(Square position) {
 		this.position = position;
 	}
 
@@ -74,26 +74,21 @@ public class Player {
 	 */
 	public void move(int numOfMoves, Board board) {
 
-		int newPostition = this.position + numOfMoves;
+		Square curPosition = position;
 
-		// Add a bonus every time the player passes [START] square
-		int passStartEarn = 0;
-
-		while (newPostition >= board.getBoardLength()) {
-			newPostition -= board.getBoardLength();
-			passStartEarn += PASS_START_BONUS;
+		for (int i = 0; i < numOfMoves; i++) {
+			curPosition = curPosition.getNextSquare();
+			// If pass START, get bonus
+			if (curPosition.getIndex() == 0) {
+				this.earnMoney(PASS_START_BONUS, "Pass START Square Earning.");
+			}
 		}
 
-		if (passStartEarn > 0) {
-			this.earnMoney(passStartEarn, "Pass START Square Earning.");
-		}
-
-		this.setPosition(newPostition);
+		this.position = curPosition;
 
 		// activate square event
-		Square landingSquare = board.getSquare(this.position);
-		System.out.printf("You landed on %s!\n", landingSquare.getName());
-		landingSquare.activate(this, board);
+		this.position.activate(this, board);
+
 	}
 
 	/**
@@ -106,18 +101,17 @@ public class Player {
 	 */
 	public void moveBackward(int numOfMoves, Board board) {
 
-		int newPosition = this.position - numOfMoves;
+		Square curPosition = position;
 
-		while (newPosition < 0) {
-			newPosition += board.getBoardLength();
+		for (int i = 0; i < numOfMoves; i++) {
+			curPosition = curPosition.getPrevSquare();
 		}
 
-		this.setPosition(newPosition);
+		this.position = curPosition;
 
 		// activate square event
-		Square landingSquare = board.getSquare(this.position);
-		System.out.printf("You landed on %s!\n", landingSquare.getName());
-		landingSquare.activate(this, board);
+		this.position.activate(this, board);
+	
 	}
 
 	/**
@@ -307,7 +301,7 @@ public class Player {
 					System.out.println("Area id: " + areaId);
 					areasOwned.get(areaId - 1).displayDevelopmentDetails();
 				}
-				
+
 				// print which areas the player is in charge
 				if (!monopolies.isEmpty()) {
 					System.out.println("You are in charge of the following fields: ");
@@ -315,9 +309,9 @@ public class Player {
 						System.out.println(field.getName());
 					}
 				}
-				
+
 				System.out.println();
-				
+
 				String playerDecision;
 				do {
 					System.out.println("Please enter your decision as instructions below.");
@@ -363,17 +357,18 @@ public class Player {
 						// if player is not monopoly, or if player is monopoly and has no development in
 						// the field, sell area
 						// else, sell the remaining developments
-						
+
 						if (totalNumOfDevelopmentsByField == 0) {
 							this.sellArea(areaToSell);
 							break;
 						} else {
 							System.out.println("There are developments left in the field. Selling developments...");
 							if (playerDecisionSplit.length < 2) {
-								System.err.println("You need to enter a number of developments to sell. Please try again.");
+								System.err.println(
+										"You need to enter a number of developments to sell. Please try again.");
 								continue;
 							}
-							
+
 							int numOfDevToSell = Integer.parseInt(playerDecisionSplit[1]);
 
 							if (numOfDevToSell < 1 || numOfDevToSell > areaNumOfDevelopments) {
@@ -391,7 +386,7 @@ public class Player {
 								.println("Invalid area and number of development entries. Please enter valid numbers.");
 					}
 				} while (!playerDecision.equalsIgnoreCase("e"));
-				
+
 				// check if the new balance is enough to pay the obligation
 				// + If no, continue to ask for player's decision to sell properties, if they
 				// have any properties left

@@ -11,18 +11,27 @@ import java.util.Random;
  */
 public class ChanceSquare extends Square {
 	
-	public ChanceSquare() {
-		
+	private Chance[] chancePool;
+	
+	public ChanceSquare(String name, int index) {
+		super(name, index);
 	}
 	
+	public Chance[] getChancePool() {
+		return chancePool;
+	}
+
+	public void setChancePool(Chance[] chancePool) {
+		this.chancePool = chancePool;
+	}
+
 	@Override
 	public void activate(Player player, Board board) {
-		IEvent[] chanceDeck = board.getChanceCards();
-		
+		super.activate(player, board);
 		// draw a random card
-		IEvent chance = this.draw(chanceDeck);
+		Chance chance = this.draw(this.chancePool);
 		
-		chance.activate(player, board);
+		chance.activateChance(player, board);
 		
 		System.out.println("Chance ends.");
 	}
@@ -32,12 +41,11 @@ public class ChanceSquare extends Square {
 	 * @param pool
 	 * @return
 	 */
-	public IEvent draw(IEvent[] pool) {
+	public Chance draw(Chance[] pool) {
 		Random random = new Random();
 		int chanceIndex = random.nextInt(pool.length);
-		IEvent cardDrawn = pool[chanceIndex];
+		Chance cardDrawn = pool[chanceIndex];
 		
 		return cardDrawn;
 	}
-
 }

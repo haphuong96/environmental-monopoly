@@ -3,15 +3,17 @@
  */
 package game;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+
+import gamebuild.BuildAreaSquare;
+import gamebuild.BuildBlankSquare;
+import gamebuild.BuildChanceSquare;
+import gamebuild.BuildDonationSquare;
+import gamebuild.BuildTaxSquare;
+import gamebuild.CompareSquareByLocation;
 
 /**
  * @author HA PHUONG
@@ -19,11 +21,8 @@ import java.util.Map;
  */
 public class Board {
 
-	private static final int NUM_DEVELOPMENTS_TO_UNLOCK_MAJOR_DEVELOPMENT = 3;
-
 	private Square[] squares;
 	private AreaSquare[] areas;
-	private IEvent[] chancePool;
 
 	/**
 	 * Constructor to build the list of squares and fields.
@@ -33,193 +32,68 @@ public class Board {
 	}
 
 	/**
-	 * Build the board. Individual square information is stored in a csv file. This
+	 * Build the board. Individual square information is stored in csv files. This
 	 * method will read information from input file to build the squares and the
 	 * board.
 	 */
 	private void build() {
+		List<Square> squareBuildList = new ArrayList<>();
+		List<AreaSquare> areaBuildList = new ArrayList<>();
+		// Threads for building squares
 
-		String line;
-		File fileBoard = new File("Board.csv");
-		File fileFields = new File("Fields.csv");
+		Thread buildAreas = new Thread(new BuildAreaSquare(squareBuildList, areaBuildList));
+		Thread buildBlanks = new Thread(new BuildBlankSquare(squareBuildList));
+		Thread buildChance = new Thread(new BuildChanceSquare(squareBuildList));
+		Thread buildDonation = new Thread(new BuildDonationSquare(squareBuildList));
+		Thread buildTax = new Thread(new BuildTaxSquare(squareBuildList));
 
-		ArrayList<Square> squaresFromFile = new ArrayList<>();
-		ArrayList<Field> fieldsFromFile = new ArrayList<>();
-		ArrayList<AreaSquare> areasFromFile = new ArrayList<>();
+		// build
+		buildAreas.run();
+		buildBlanks.run();
+		buildChance.run();
+		buildDonation.run();
+		buildTax.run();
 
-		FileReader fileReader;
-		BufferedReader bufferedReader;
-
+		// wait for the squares to be finished with the build
 		try {
+			buildAreas.join();
+			buildBlanks.join();
+			buildChance.join();
+			buildDonation.join();
+			buildTax.join();
 
-			fileReader = new FileReader(fileFields);
-			bufferedReader = new BufferedReader(fileReader);
+			// Sort square by location
+			Collections.sort(squareBuildList, new CompareSquareByLocation());
 
-			line = bufferedReader.readLine();
-			line = bufferedReader.readLine();
+			// set Board properties
+			this.squares = squareBuildList.toArray(new Square[squareBuildList.size()]);
+			this.areas = areaBuildList.toArray(new AreaSquare[areaBuildList.size()]);
+			
+			// link the squares together
+			linkSquares();
 
-			while (line != null) {
-
-				Field field = new Field(line);
-				line = bufferedReader.readLine();
-
-				fieldsFromFile.add(field);
-
-			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
-		Field[] fields = new Field[fieldsFromFile.size()];
-
-		for (int loop = 0; loop < fields.length; loop++) {
-			fields[loop] = fieldsFromFile.get(loop);
-		}
-
-		// map areas to field, when read in the file
-		Map<Field, ArrayList<AreaSquare>> areaFieldMap = new HashMap<>();
-
-		try {
-
-			fileReader = new FileReader(fileBoard);
-			bufferedReader = new BufferedReader(fileReader);
-
-			line = bufferedReader.readLine();
-			line = bufferedReader.readLine();
-
-			while (line != null) {
-
-				String squareInfo[] = line.split(",");
-
-				switch (squareInfo[0]) {
-				case ("Blank"):
-
-					BlankSquare blankSquare = new BlankSquare(squareInfo[1]);
-					squaresFromFile.add(blankSquare);
-
-					break;
-				case ("Area"):
-
-					AreaSquare areaSquare = new AreaSquare();
-
-					int fieldIndex, cost, developmentCost, majorDevelopmentFee, basicEntranceFee,
-							entranceFeeWithMajorDevelopment;
-					int[] entraceFeeWithDevelopment = new int[NUM_DEVELOPMENTS_TO_UNLOCK_MAJOR_DEVELOPMENT];
-
-					fieldIndex = Integer.parseInt(squareInfo[2]);
-					cost = Integer.parseInt(squareInfo[3]);
-					developmentCost = Integer.parseInt(squareInfo[4]);
-					majorDevelopmentFee = Integer.parseInt(squareInfo[5]);
-					basicEntranceFee = Integer.parseInt(squareInfo[6]);
-					entraceFeeWithDevelopment[0] = Integer.parseInt(squareInfo[7]);
-					entraceFeeWithDevelopment[1] = Integer.parseInt(squareInfo[8]);
-					entraceFeeWithDevelopment[2] = Integer.parseInt(squareInfo[9]);
-					entranceFeeWithMajorDevelopment = Integer.parseInt(squareInfo[10]);
-
-					areaSquare.setName(squareInfo[1]);
-					areaSquare.setField(fields[fieldIndex]);
-					areaSquare.setCost(cost);
-					areaSquare.setDevelopmentCost(developmentCost);
-					areaSquare.setMajorDevelopmentCost(majorDevelopmentFee);
-					areaSquare.setBasicEntranceFee(basicEntranceFee);
-					areaSquare.setEntraceFeeWithDevelopment(entraceFeeWithDevelopment);
-					areaSquare.setEntranceFeeWithMajorDevelopment(entranceFeeWithMajorDevelopment);
-
-					squaresFromFile.add(areaSquare);
-					areasFromFile.add(areaSquare);
-//			  		fields[fieldIndex].addArea(areaSquare);
-
-					// Add the area to the list of squares of Field.
-					if (areaFieldMap.containsKey(fields[fieldIndex])) {
-						areaFieldMap.get(fields[fieldIndex]).add(areaSquare);
-					} else {
-						ArrayList<AreaSquare> areasInField = new ArrayList<>();
-						areasInField.add(areaSquare);
-						areaFieldMap.put(fields[fieldIndex], areasInField);
-					}
-
-					break;
-				case ("Donation"):
-
-					int donationAmount;
-					donationAmount = Integer.parseInt(squareInfo[11]);
-					DonationSquare donationSquare = new DonationSquare(squareInfo[1], donationAmount);
-
-					squaresFromFile.add(donationSquare);
-
-					break;
-				case ("Tax"):
-
-					Integer taxAmount;
-					taxAmount = Integer.parseInt(squareInfo[12]);
-					TaxSquare taxSquare = new TaxSquare(squareInfo[1], taxAmount);
-
-					squaresFromFile.add(taxSquare);
-
-					break;
-				case ("Chance"):
-
-					ChanceSquare chanceSquare = new ChanceSquare();
-
-					chanceSquare.setName(squareInfo[1]);
-					squaresFromFile.add(chanceSquare);
-
-					break;
-				default:
-					System.out.println("Error reading files");
-				}
-
-				line = bufferedReader.readLine();
-
-			}
-
-			bufferedReader.close();
-			fileReader.close();
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		// Field, add the list of areas to Field areas attribute.
-		for (Field field : areaFieldMap.keySet()) {
-			AreaSquare[] areas = new AreaSquare[areaFieldMap.get(field).size() - 1];
-			field.setAreas(areaFieldMap.get(field).toArray(areas));
-		}
-
-		// build chance decks
-		chancePool = new IEvent[2];
-		chancePool[0] = new BuyAreaChance();
-		chancePool[1] = new MoveRandomChance();
-
-		squares = new Square[squaresFromFile.size()];
-
-		for (int loop = 0; loop < squares.length; loop++) {
-			squares[loop] = squaresFromFile.get(loop);
-		}
-
-		areas = new AreaSquare[areasFromFile.size()];
-
-		for (int loop = 0; loop < areas.length; loop++) {
-			areas[loop] = areasFromFile.get(loop);
-		}
-
 	}
 
-	public int getBoardLength() {
-		return squares.length;
+	private void linkSquares() {
+		for (int i = 1; i < squares.length - 1; i++) {
+			squares[i].setNextSquare(squares[i + 1]);
+			squares[i].setPrevSquare(squares[i - 1]);
+		}
+
+		// START square
+		squares[0].setNextSquare(squares[1]);
+		squares[0].setPrevSquare(squares[squares.length - 1]);
+
+		// last square
+		squares[squares.length - 1].setNextSquare(squares[0]);
+		squares[squares.length - 1].setPrevSquare(squares[squares.length - 2]);
 	}
 
 	public Square getSquare(int index) {
 		return squares[index];
-	}
-
-	public IEvent[] getChanceCards() {
-		return chancePool;
 	}
 
 	public List<AreaSquare> getAvailableAreas() {

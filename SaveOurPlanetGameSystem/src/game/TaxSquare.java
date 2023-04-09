@@ -13,9 +13,8 @@ public class TaxSquare extends Square {
 	/**
 	 * 
 	 */
-	public TaxSquare(String name, int taxAmount) {
-		this.taxAmount = taxAmount;
-		this.setName(name);
+	public TaxSquare(String name, int index) {
+		super(name, index);
 	}
 	
 	
@@ -34,6 +33,8 @@ public class TaxSquare extends Square {
 
 	@Override
 	public void activate(Player player, Board board) {
+		super.activate(player, board);
+		
 		if (player.getBalance() < this.taxAmount) {
 			player.offerToSell(taxAmount);
 		}

@@ -5,6 +5,7 @@ package game;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -30,7 +31,7 @@ public class GameSystem {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Welcome to Save Our Planet! Have fun!");
-		
+
 		// register number of players and player's name
 		registerPlayers();
 
@@ -47,12 +48,11 @@ public class GameSystem {
 	 * total number of players and individual player's name
 	 */
 	public static void registerPlayers() {
-
+		// Register number of players
 		int numOfPlayers;
-		String name;
 
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter num of players");
+		System.out.println("Enter number of players!");
 
 		while (true) {
 			String playerInput = scanner.nextLine();
@@ -71,33 +71,37 @@ public class GameSystem {
 				System.err.println("You should enter a valid number. Please try again.");
 			}
 		}
-
+		
+		// Register player names
 		players = new Player[numOfPlayers];
-		ArrayList<String> playerNames = new ArrayList<>();
+		List<String> playerNames = new ArrayList<>();
 
-		for (int loop = 0; loop < numOfPlayers; loop++) {
+		Square startingSq = board.getSquare(0);
 
-			Player player = new Player();
+		for (int i = 0; i < players.length; i++) {
+			Player player = new Player(startingSq);
 
-			System.out.println("Please enter player name");
-			name = scanner.nextLine();
+			while (true) {
+				System.out.printf("Please enter player %d name:\n", i + 1);
+				String name = scanner.nextLine();
 
-			// The system does not allow more than one player to have the same name (Case
-			// sensitive)
-			if (!playerNames.contains(name)) {
+				if (playerNames.contains(name)) {
+					System.err.println("Sorry, that name has been taken, please enter another name\n.");
+					continue;
+				}
+
+				// add to list of names
 				playerNames.add(name);
-
+				// set player
 				player.setName(name);
-				players[loop] = player;
+				players[i] = player;
 
-				System.out.println("Player " + (loop + 1) + " has been named " + name);
-
-			} else {
-				System.err.println("Sorry, that name has been taken, please enter another name\n.");
-				loop--;
+				System.out.println("Player " + (i + 1) + " has been named " + player.getName() + "!");
+				break;
 			}
 
 		}
+
 	}
 
 	/**
@@ -144,8 +148,7 @@ public class GameSystem {
 						dice.roll();
 						diceResult += dice.getFaceValue();
 					}
-					
-					diceResult = 12;
+
 					System.out.printf("Player %s have rolled a %d and a %d - that totals %d.\n", player.getName(),
 							dices[0].getFaceValue(), dices[1].getFaceValue(), diceResult);
 

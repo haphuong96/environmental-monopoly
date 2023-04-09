@@ -1,5 +1,5 @@
-name
-Wind
-Hydroelectric
-Forests
-Solar
+id,name
+1,Wind
+2,Hydroelectric
+3,Forests
+4,Solar

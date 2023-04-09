@@ -31,36 +31,9 @@ public class AreaSquare extends Square {
 	/**
 	 * Default constructor
 	 */
-	public AreaSquare() {
-
-	}
-
-	/**
-	 * Constructor with arguments
-	 * @param owner
-	 * @param field
-	 * @param numOfDevelopments
-	 * @param majorDevelopment
-	 * @param cost
-	 * @param developmentCost
-	 * @param majorDevelopmentCost
-	 * @param basicEntranceFee
-	 * @param entraceFeeWithDevelopment
-	 * @param entranceFeeWithMajorDevelopment
-	 */
-	public AreaSquare(Player owner, Field field, int numOfDevelopments, boolean majorDevelopment, int cost,
-			int developmentCost, int majorDevelopmentCost, int basicEntranceFee, int[] entraceFeeWithDevelopment,
-			int entranceFeeWithMajorDevelopment) {
-		this.owner = owner;
-		this.field = field;
-		this.numOfDevelopments = numOfDevelopments;
-		this.majorDevelopment = majorDevelopment;
-		this.cost = cost;
-		this.developmentCost = developmentCost;
-		this.majorDevelopmentCost = majorDevelopmentCost;
-		this.basicEntranceFee = basicEntranceFee;
-		this.entraceFeeWithDevelopment = entraceFeeWithDevelopment;
-		this.entranceFeeWithMajorDevelopment = entranceFeeWithMajorDevelopment;
+	public AreaSquare(String name, int index) {
+		super(name, index);
+		entraceFeeWithDevelopment = new int[NUM_DEVELOPMENTS_TO_UNLOCK_MAJOR_DEVELOPMENT];
 	}
 
 	public Field getField() {
@@ -207,7 +180,8 @@ public class AreaSquare extends Square {
 	 */
 	@Override
 	public void activate(Player player, Board board) {
-
+		super.activate(player, board);
+		
 		if (owner == null) {
 			this.offerToBuy(player);
 		} else if (!player.equals(owner)) {

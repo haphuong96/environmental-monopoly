@@ -13,14 +13,8 @@ public class DonationSquare extends Square {
 	/**
 	 * 
 	 */
-	public DonationSquare() {
-
-	}
-
-
-	public DonationSquare(String name, int donationAmount) {
-		this.donationAmount = donationAmount;
-		this.setName(name);
+	public DonationSquare(String name, int index) {
+		super(name, index);
 	}
 
 
@@ -38,6 +32,7 @@ public class DonationSquare extends Square {
 
 	@Override
 	public void activate(Player player, Board board) {
+		super.activate(player, board);
 		player.earnMoney(this.donationAmount, "Earn Donation From Government For Environmental Campaigns.");
 	}
 	

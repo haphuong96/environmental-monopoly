@@ -1,0 +1,11 @@
+location,name,field,cost,developmentCost,majorDevelopmentCost,basicEntranceFee,entraceFeeWithDevelopment1,entraceFeeWithDevelopment2,entraceFeeWithDevelopment3,entranceFeeWithMajorDevelopment
+2,Jiuquan Wind Power Base,1,150,100,200,15,50,150,450,600
+4,Shepherds Flat Wind Farm,1,150,100,200,15,50,150,450,600
+5,Amazon Rainforest,3,220,200,400,30,90,250,700,875
+8,Tiaga Biome,3,220,200,400,30,90,250,700,875
+10,Yosemite,3,220,200,400,30,90,250,700,875
+12,Three Gorges Dam,2,180,150,250,20,70,200,550,750
+14,Grand Coulee Dam,2,180,150,250,20,70,200,550,750
+15,Guri Dam,2,180,150,250,20,70,200,550,750
+18,Golmud Solar Park,4,260,250,500,40,110,330,800,975
+20,Benban Solar Park,4,260,250,500,40,110,330,800,975

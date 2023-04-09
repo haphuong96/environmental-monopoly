@@ -10,10 +10,10 @@ import java.util.Scanner;
  * @author HA PHUONG
  *
  */
-public class BuyAreaChance implements IEvent {
+public class BuyAreaChance extends Chance {
 
 	@Override
-	public void activate(Player player, Board board) {
+	public void activateChance(Player player, Board board) {
 		System.out.println("You will now have the opportunity to purchase any available area on the board!");
 
 		// check for available areas
